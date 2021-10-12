@@ -64,6 +64,7 @@ const data = await wallet.getData({ contract, data });
 const data = await wallet.getData({ contract, function, params });
 
 // get balance
+const balance = await wallet.getBalance();
 const balance = await wallet.getBalance({ type: 'ERC20', contract: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b' });
 
 // send transaction
