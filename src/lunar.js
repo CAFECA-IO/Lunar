@@ -1,8 +1,16 @@
-import Connector from './connector.js';
+import ConnectorFactory from './connectorFactory.js';
+import Environment from './environment.js'
 
 class Lunar {
   constructor() {
-    Test.test();
+    
+  }
+
+  get env() {
+    return {
+      platform: Environment.getPlatform(),
+      wallets: Environment.getWallets()
+    }
   }
 }
 
