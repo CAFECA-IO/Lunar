@@ -107,5 +107,8 @@ const transaction = {
   amount: '0',
   data: '0xa9059cbb000000000000000000000000a889fa1918762b214f734ee28b7415da416e11d0000000000000000000000000000000000000000000034f74dace8f4241400000'
 };
-lunar.send(transaction);
+const result = await lunar.send(transaction);
+
+// disconnect
+lunar.disconnect();
 ```
