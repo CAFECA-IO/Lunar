@@ -1,6 +1,14 @@
 # Lunar
 Blockchain Connect Module
 
+## Build from source
+```shell
+git clone https://github.com/CAFECA-IO/Lunar
+cd Lunar
+npm i
+npm run build
+```
+
 ## Install in Web Browser
 ```html
 <script type="text/javascript" src="https://libs.cafeca.io/lunar/latest/lunar.js"></script>
