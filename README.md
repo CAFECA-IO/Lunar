@@ -52,7 +52,7 @@ const blockchains = lunar.blockchains;
 const wallets = lunar.wallets;
 
 // get wallet
-const wallet = await lunar.getWallet({ type: 'ethereum' });
+const wallet = await lunar.getWallet({ blockchain: 'ethereum' });
 
 // get address
 const address = wallet.address;
