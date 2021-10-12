@@ -26,11 +26,14 @@ const connected = lunar.connected
 // connect with injected javascript
 lunar.connect({ wallet });
 
+// connect with wallet connect
+const qrcode = await lunar.walletConnect();
+
 // get blockchains
-const blockchains = lunar.blockchains
+const blockchains = lunar.blockchains;
 
 // get wallets
-const wallets = lunar.wallets
+const wallets = lunar.wallets;
 
 // get wallet
 const wallet = await lunar.getWallet({ type: 'ethereum' });
@@ -45,14 +48,14 @@ const data = await wallet.getData({ contract, data });
 const data = await wallet.getData({ contract, function, params });
 
 // get balance
-const balance = await wallet.getBalance({ type: 'ERC20', contract: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b' })
+const balance = await wallet.getBalance({ type: 'ERC20', contract: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b' });
 
 // send transaction
 const transaction = {
   to: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b',
   amount: '0',
   data: '0xa9059cbb000000000000000000000000a889fa1918762b214f734ee28b7415da416e11d0000000000000000000000000000000000000000000034f74dace8f4241400000'
-}
+};
 lunar.send(transaction);
 
 // disconnect
