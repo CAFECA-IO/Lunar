@@ -19,7 +19,15 @@ lunar.on((event) => {
 
 // get environment information return { platform, wallets }
 const env = lunar.env
+```
+```json
+{
+  platform: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Mobile Safari/537.36',
+  wallets: ['imtoken']
+}
+```
 
+```
 // if lunar connect with wallet -> return boolean
 const connected = lunar.connected
 
