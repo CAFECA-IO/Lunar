@@ -78,3 +78,34 @@ lunar.send(transaction);
 // disconnect
 lunar.disconnect();
 ```
+
+## TideBitSWAP for Example
+```javascript
+const lunar = new Lunar();
+
+// connect with Tidetime Chain
+const wallet = 'metamask';
+const blockchain = {
+  chainId: "0x1f51",
+  chainName: "Tidetime",
+  nativeCurrency: {
+    name: "Tidetime Token",
+    symbol: "TTT",
+    decimals: 18
+  },
+  rpcUrls: ["https://rpc.tidebit.network"],
+  iconUrls: ["https://iconape.com/wp-content/png_logo_vector/tidebit.png"]
+}
+lunar.connect({ wallet, blockchain });
+
+// read TideBit SWAP contract
+const data = await wallet.getData({ contract, function, params });
+
+// send transaction
+const transaction = {
+  to: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b',
+  amount: '0',
+  data: '0xa9059cbb000000000000000000000000a889fa1918762b214f734ee28b7415da416e11d0000000000000000000000000000000000000000000034f74dace8f4241400000'
+};
+lunar.send(transaction);
+```
