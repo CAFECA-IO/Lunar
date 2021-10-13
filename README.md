@@ -36,20 +36,35 @@ const env = lunar.env
 ```
 
 ```
-// if lunar connect with wallet -> return boolean
+// 取得連線狀態： if lunar connect with wallet -> return boolean 
 const connected = lunar.connected
 
+========== 與其他app 連線
+/* 
+@params(String): appName 
+**/
+// appName: metamask, imtoken, tidewallet...
 // connect with injected javascript
-lunar.connect({ wallet });
+lunar.connect({ appName });
 
 // connect with wallet connect
 const qrcode = await lunar.walletConnect();
+===========
 
+連線後
+=========== 取得 app 上支援的鏈（可以使用的私鑰）
+/*
+@return(JSON)
+**/
 // get blockchains
 const blockchains = lunar.blockchains;
 
+/*
+@return(JSON)
+*//
 // get wallets
 const wallets = lunar.wallets;
+===========
 
 // get wallet
 const wallet = await lunar.getWallet({ blockchain: 'ethereum' });
