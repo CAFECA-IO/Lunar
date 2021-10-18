@@ -114,7 +114,7 @@ const blockchain = {
 lunar.connect({ wallet, blockchain });
 
 // read TideBit SWAP contract
-const data = await wallet.getData({ contract, function, params });
+const data = await lunar.getData({ contract, function, params });
 
 // send transaction
 const transaction = {
