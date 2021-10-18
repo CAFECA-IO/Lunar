@@ -1,3 +1,4 @@
+import Wallets from './constants/wallets.js';
 import TideWallet from './connectors/tidewallet.js';
 import ImToken from './connectors/imtoken.js';
 import Metamask from './connectors/metamask.js';
@@ -8,21 +9,23 @@ class ConnectorFactory {
   }
 
   static create(wallet = '') {
+    console.log(`create ${wallet}`);
     let connector;
     switch(wallet) {
-      case 'tidewallet':
+      case Wallets.TideWallet:
         connector = new TideWallet();
       break;
 
-      case 'imtoken':
+      case Wallets.imToken:
         connector = new ImToken();
       break;
 
-      case 'metamask':
+      case Wallets.Metamask:
         connector = new Metamask();
       default:  
     }
+    return connector;
   }
 }
 
-export default Connectors;
+export default ConnectorFactory;

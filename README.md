@@ -23,14 +23,29 @@ const env = lunar.env
 // if lunar connect with wallet -> return boolean
 const connected = lunar.connected
 
+// get supported wallet
+// return Metamask|imToken|TideWallet
+const walletList = l.env.wallets;
+
 // connect with injected javascript
-lunar.connect({ wallet });
+const blockchain = {
+  chainId: "0x1f51",
+  chainName: "Tidetime",
+  nativeCurrency: {
+    name: "Tidetime Token",
+    symbol: "TTT",
+    decimals: 18
+  },
+  rpcUrls: ["https://rpc.tidebit.network"],
+  iconUrls: ["https://iconape.com/wp-content/png_logo_vector/tidebit.png"]
+}
+lunar.connect({ wallet: 'Metamask',  });
 
 // connect with wallet connect
 const qrcode = await lunar.walletConnect();
 
 // get blockchains
-const blockchains = lunar.blockchains;
+const blockchain = lunar.blockchain;
 
 // get wallets
 const wallets = lunar.wallets;

@@ -1,8 +1,22 @@
 class Connector {
+  _isConnected = false;
+  _address;
+  _blockchain;
+
   constructor() {}
-  get connected() {}
+  get isConnected() {
+    return this._isConnected;
+  }
+  get blockchain() {
+    return this._blockchain;
+  }
+  get address() {
+    return this._address;
+  }
+  get type() {
+    return this._type;
+  }
   get wallet() {}
-  get blockchains() {}
 
   async init() {}
   on(event, callback) {}
