@@ -16,22 +16,30 @@ class SmartContract {
     result = arr.join('');
     return result;
   }
+
   static toContractData({ func, params }) {
     if(!func) {
       return '0x'
     }
-
-    let result = '0x';
-    funcSeed = typeof func == 'string' ?
+    const funcSeed = typeof func == 'string' ?
       func :
       func.toString();
-    dataSeed = Array.isArray(params) ?
-      params.map((v) => this.leftPad32(Utils.toHex(v))) :
+    const dataSeed = Array.isArray(params) ?
+      params.map((v) => {
+        console.log(v);
+        console.log(Utils.toHex(v));
+        console.log(this.leftPad32(Utils.toHex(v)));
+        return this.leftPad32(Utils.toHex(v))
+      }) :
       [this.leftPad32(Utils.toHex(params))];
-    result = result
+    const result = '0x'
       .concat(Keccak.keccak256(funcSeed).substr(0, 8))
       .concat(dataSeed.join(''));
     return result;
+  }
+
+  static isEthereumAddress(addr) {
+    return /^0x[a-fA-F0-9]{40}$/.test(addr);
   }
 }
 

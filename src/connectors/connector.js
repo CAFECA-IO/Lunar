@@ -2,6 +2,7 @@ class Connector {
   _isConnected = false;
   _address;
   _blockchain;
+  _assets = [];
 
   constructor() {}
   get isConnected() {
@@ -23,6 +24,7 @@ class Connector {
   connect() {}
   disconnect() {}
   send({ to, amount, data }) {}
+  getBalance({ contract, address }) {}
   getData({ contract, data, func, params }) {}
 }
 

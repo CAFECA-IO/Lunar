@@ -1,4 +1,17 @@
 class Utils {
+  static startWith(str1, str2) {
+    let result;
+    try {
+      if(!str1.startsWith(str2)) {
+        result = str2.concat(str1);
+      }
+    }
+    catch(e) {
+      result = str1;
+    }
+    return result;
+  }
+
   static leftPad(data, length) {
     const l = length > 1 ?
       length * 2 :
@@ -49,10 +62,16 @@ class Utils {
 
     return result;
   }
+  static isHex(data) {
+    return /^0x[a-fA-F0-9]*$/.test(data);
+  }
   static toHex(data) {
     let result;
     if(data == undefined) {
       result = '';
+    }
+    else if(this.isHex(data)) {
+      result = data.substr(2);
     }
     else if(Number.isInteger(data)) {
       result = data.toString(16);
