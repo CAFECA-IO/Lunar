@@ -23,14 +23,18 @@ const env = lunar.env
 // if lunar connect with wallet -> return boolean
 const connected = lunar.connected
 
+// get supported wallet
+// return Metamask|imToken|TideWallet
+const walletList = l.env.wallets;
+
 // connect with injected javascript
-lunar.connect({ wallet });
+lunar.connect({ wallet: Lunar.Wallets.Metamask, blockchain: Lunar.Blockchains.Ropsten });
 
 // connect with wallet connect
 const qrcode = await lunar.walletConnect();
 
 // get blockchains
-const blockchains = lunar.blockchains;
+const blockchain = lunar.blockchain;
 
 // get wallets
 const wallets = lunar.wallets;
@@ -40,6 +44,9 @@ const wallet = await lunar.getWallet({ type: 'ethereum' });
 
 // get address
 const address = wallet.address;
+
+// get ERC20
+const data = await wallet.getAsset({ contract });
 
 // get data with raw
 const data = await wallet.getData({ contract, data });
@@ -53,11 +60,16 @@ const balance = await wallet.getBalance({ type: 'ERC20', contract: '0x048Adee1B0
 // send transaction
 const transaction = {
   to: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b',
-  amount: '0',
+  amount: '0.001',
   data: '0xa9059cbb000000000000000000000000a889fa1918762b214f734ee28b7415da416e11d0000000000000000000000000000000000000000000034f74dace8f4241400000'
 };
 lunar.send(transaction);
 
 // disconnect
 lunar.disconnect();
+```
+
+## Work With Smart Contract
+```javascript
+const uniswap = lunar.interfaceOf(Lunar.abi.uniswap, '')
 ```
