@@ -24,8 +24,10 @@ class Connector {
   connect() {}
   disconnect() {}
   send({ to, amount, data }) {}
+  getAsset({ contract }) {}
   getBalance({ contract, address }) {}
   getData({ contract, data, func, params }) {}
+  interfaceOf({ contract, abi }) {}
 }
 
 export default Connector;

@@ -12,29 +12,14 @@ class Utils {
     return result;
   }
 
-  static leftPad(data, length) {
-    const l = length > 1 ?
-      length * 2 :
-      2;
-    let seed;
-    
-    if(typeof data == 'string') {
-      seed = data;
+  static chunkSubstr(str, size) {
+    const numChunks = Math.ceil(str.length / size);
+    const chunks = new Array(numChunks);
+    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+      chunks[i] = str.substr(o, size);
     }
-    else {
-      try {
-        seed = data.toString();
-      }
-      catch(e) {
-        seed = '';
-      }
-    }
-
-    const result = new Array(l)
-      .fill(0).join('')
-      .concat(seed)
-      .substr(l * -1);
-    return result;
+  
+    return chunks;
   }
 
   static stringToHex(data) {
@@ -48,9 +33,9 @@ class Utils {
         let code = seed.charCodeAt(i) + 1;
         let tmpSqr = Math.ceil(Math.log(code) / Math.log(256));
         sqr = tmpSqr > sqr ? tmpSqr : sqr;
-        arr[i] = this.leftPad(seed.charCodeAt(i).toString(16), tmpSqr);
+        arr[i] = seed.charCodeAt(i).toString(16).padStart(tmpSqr * 2, '0');
       }
-      arr = arr.map((v) => this.leftPad(v, sqr));
+      arr = arr.map((v) => v.padStart(sqr * 2, '0'));
       result = arr.join('');
     } else {
       try {

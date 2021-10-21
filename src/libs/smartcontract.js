@@ -1,5 +1,6 @@
 import Utils from '../libs/utils.js';
 import Keccak from '../libs/keccak.js'
+import BigNumber from './bignumber.js';
 
 class SmartContract {
   static leftPad32(str) {
@@ -7,13 +8,41 @@ class SmartContract {
     let arr;
     let length = 32 * 2;
     if(typeof str == 'string') {
-      length = length - str.length;
-      arr = new Array(length).fill(0)
-      arr.push(str);
+      result = str.padStart(length, '0');
     } else {
-      arr = new Array(length).fill(0)
+      try {
+        result = str.toString(16).padStart(length, '0');
+      }
+      catch(e) {
+        result = new Array(length).fill(0).join('');
+      }
     }
-    result = arr.join('');
+    return result;
+  }
+
+  static parseString(data) {
+    let seed = data;
+    if(seed.indexOf('0x') == '0') {
+      seed = seed.substr(2);
+    }
+
+    if(seed.length > 64) {
+      let chunks = Utils.chunkSubstr(seed, 64).slice(2);
+      return chunks.map((v) => this.parseString(v)).join('');
+    }
+
+    let result = '';
+    try {
+      result = decodeURIComponent('%' + seed.match(/.{1,2}/g).filter((v) => v != '00').join('%'));
+    }
+    catch(e) {}
+    return result;
+  }
+
+  static toSmallestUnitHex({ amount, decimals }) {
+    const result = new BigNumber(amount)
+      .multipliedBy(new BigNumber(10).pow(decimals))
+      .toString(16);
     return result;
   }
 
@@ -26,9 +55,6 @@ class SmartContract {
       func.toString();
     const dataSeed = Array.isArray(params) ?
       params.map((v) => {
-        console.log(v);
-        console.log(Utils.toHex(v));
-        console.log(this.leftPad32(Utils.toHex(v)));
         return this.leftPad32(Utils.toHex(v))
       }) :
       [this.leftPad32(Utils.toHex(params))];

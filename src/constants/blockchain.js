@@ -29,6 +29,10 @@ class Blockchains {
   static Ethereum = {
     chainId: "0x1",
     chainName: "Ethereum",
+    nativeCurrency: {
+      symbol: "ETH",
+      decimals: 18,
+    },
   };
   static FUJI = {
     chainId: "0xa869",
@@ -75,10 +79,13 @@ class Blockchains {
     rpcUrls: [ "https://rpc-mumbai.maticvigil.com/" ],
     blockExplorerUrls: [ "https://mumbai-explorer.matic.today/" ],
   }
-  static Polygon = this.Matic;
   static Ropsten = {
     chainId: "0x3",
     chainName: "ETH testnet Ropsten",
+    nativeCurrency: {
+      symbol: "ETH",
+      decimals: 18,
+    },
   };
   static Tidetime = {
     chainId: "0x1f51",
@@ -101,6 +108,10 @@ class Blockchains {
     rpcUrls: [ "https://rpc.xdaichain.com/" ],
     blockExplorerUrls: [ "https://blockscout.com/xdai/mainnet" ],
   };
+
+  static AvaxTestnet = this.FUJI;
+  static EthereumTestnet = this.Ropsten;
+  static Polygon = this.Matic;
 
   static get keys() {
     return Object.keys(this);

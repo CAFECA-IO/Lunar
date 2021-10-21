@@ -17,10 +17,13 @@ class Metamask extends Connector {
     this._isConnected = false;
   }
 
-  async send({ to, amount, data }) {
+  async send({ from = this.address, to, amount, data }) {
+    const decimals = await this.getDecimals();
+    const value = SmartContract.toSmallestUnitHex({ amount, decimals });
     const transactionParameters = {
+      from,
       to,
-      value: amount,
+      value,
       data,
       chainId: this._chainId
     }
@@ -75,20 +78,55 @@ class Metamask extends Connector {
     }
     return Promise.all([
       this.getData({ contract, func: 'balanceOf(address)', params: [address_] }),
-      this.getData({ contract, func: 'decimals()' })
+      this.getDecimals({ contract })
     ])
     .then(([ _balance, _decimals ]) => {
-      const decimals = parseInt(_decimals);
-      const balance = new BigNumber(_balance).dividedBy(new BigNumber(10).pow(decimals));
-      console.log(balance.toString(16));
+      const balance = new BigNumber(_balance).dividedBy(new BigNumber(10).pow(_decimals));
       return Promise.resolve(balance);
     })
   }
 
-  async getDecimals({ contract }) {
-    return this.getData({ contract, func: 'balanceOf(address)', params: [address_] }).then((rs) => {
-      const balance = new BigNumber(rs).decimalPlaces(18);
-      console.log(rs, balance);
+  async getDecimals({ contract } = {}) {
+    let decimals;
+    if(!contract) {
+      try {
+        decimals = this.blockchain.nativeCurrency.decimals;
+      }
+      catch(e) {
+        decimals = 18;
+      }
+      return Promise.resolve(decimals);
+    }
+
+    return this.getData({ contract, func: 'decimals()' }).then((rs) => {
+      const result = parseInt(rs);
+      return Promise.resolve(result);
+    })
+  }
+  async getSymbol({ contract } = {}) {
+    let symbol;
+    if(!contract) {
+      try {
+        symbol = this.blockchain.nativeCurrency.symbol;
+      }
+      catch(e) {
+        symbol = 'ETH';
+      }
+      return Promise.resolve(symbol);
+    }
+
+    return this.getData({ contract, func: 'symbol()' }).then((rs) => {
+      const result = SmartContract.parseString(rs);
+      return Promise.resolve(result);
+    })
+  }
+  async getAsset({ contract } = {}) {
+    return Promise.all([
+      this.getSymbol({ contract }),
+      this.getDecimals({ contract })
+    ])
+    .then(([ symbol, decimals ]) => {
+      return Promise.resolve({ symbol, decimals });
     })
   }
 

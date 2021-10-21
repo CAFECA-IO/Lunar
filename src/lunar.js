@@ -4,7 +4,8 @@ import ConnectorFactory from './connectorFactory.js';
 import Environment from './environment.js'
 
 class Lunar {
-  static blockchains = Blockchains;
+  static Blockchains = Blockchains;
+  static Wallets = Wallets;
 
   _connector;
   _connectors = [];
@@ -59,6 +60,10 @@ class Lunar {
     return this._connector.disconnect();
   }
 
+  async getAsset({ contract } = {}) {
+    return this._connector.getAsset({ contract });
+  }
+
   async getBalance({ contract, address } = {}) {
     return this._connector.getBalance({ contract, address });
   }
@@ -70,6 +75,10 @@ class Lunar {
   async send({ to, amount, data }) {
     return this._connector.send({ to, amount, data });
   }
+
+  async interfaceOf({ contract, abi }) {
+    return this._connector.interfaceOf({ contract, abi });
+  }
 }
 
 if(window) {
@@ -77,10 +86,11 @@ if(window) {
 
   /** Test Case
   window.lunar = new Lunar();
-  window.lunar.connect({ blockchain: Lunar.blockchains.Ropsten });
+  window.lunar.connect({ blockchain: Lunar.Blockchains.Ropsten });
   window.lunar.getData({ contract: '0x333cf7C5F2A544cc998d4801e5190BCb9E04003e', func: 'factory()', params: [] });
   window.lunar.getBalance();
   window.lunar.getBalance({ address: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b' });
   window.lunar.getBalance({ contract: '0x9c8fa1ee532f8afe9f2e27f06fd836f3c9572f71', address: '0xdc926e34e73292cd7c48c6fd7375af7d93435d36' });
+  window.lunar.send({ to: '0xd8a149a2E906613CB1e5c0FFf675AF2636Cf77bF', amount: '0.001' });
    */
 }

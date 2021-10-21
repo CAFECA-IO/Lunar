@@ -1,15 +1,11 @@
 {
-  "name": "lunar",
-  "version": "1.0.0",
+  "name": "@cafeca/lunar",
+  "version": "0.1.0",
   "description": "Blockchain Connect Module",
-  "main": "lunar.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "./build/lunar.js",
   "scripts": {
     "dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
