@@ -21,14 +21,17 @@ lunar.on((event) => {
 const env = lunar.env
 
 // if lunar connect with wallet -> return boolean
-const connected = lunar.connected
+const isConnected = lunar.isConnected
 
 // get supported wallet
 // return Metamask|imToken|TideWallet
-const walletList = l.env.wallets;
+const walletList = lunar.env.wallets;
 
 // connect with injected javascript
 lunar.connect({ wallet: Lunar.Wallets.Metamask, blockchain: Lunar.Blockchains.Ropsten });
+
+// switch blockchain
+lunar.switchBlockchain(Lunar.Blockchains.AvaxTestnet);
 
 // connect with wallet connect
 const qrcode = await lunar.walletConnect();
@@ -36,14 +39,8 @@ const qrcode = await lunar.walletConnect();
 // get blockchains
 const blockchain = lunar.blockchain;
 
-// get wallets
-const wallets = lunar.wallets;
-
-// get wallet
-const wallet = await lunar.getWallet({ type: 'ethereum' });
-
 // get address
-const address = wallet.address;
+const address = lunar.address;
 
 // get ERC20
 const data = await wallet.getAsset({ contract });
