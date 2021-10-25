@@ -4,8 +4,6 @@ module.exports = {
   entry: './src/lunar.js',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'lunar.js',
-    library: 'Lunar',
-    libraryTarget:'umd'
+    filename: 'lunar.js'
   },
 };
