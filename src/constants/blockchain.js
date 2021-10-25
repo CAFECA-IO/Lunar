@@ -12,7 +12,7 @@ class Blockchains {
     chainId: "0x38",
     chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
-      symbol: "AVAX",
+      symbol: "BNB",
     },
     rpcUrls: [ "https://bsc-dataseed.binance.org/" ],
     blockExplorerUrls: [ "https://bscscan.com/" ],
@@ -21,7 +21,7 @@ class Blockchains {
     chainId: "0x61",
     chainName: "Binance Smart Chain Testnet",
     nativeCurrency: {
-      symbol: "AVAX",
+      symbol: "BNB",
     },
     rpcUrls: [ "https://data-seed-prebsc-1-s1.binance.org:8545/" ],
     blockExplorerUrls: [ "https://testnet.bscscan.com" ],

@@ -28,8 +28,20 @@ class Lunar {
       false;
   }
 
+  get address() {
+    return this._connector ?
+      this._connector.address:
+      false;
+  }
+
+  get blockchain() {
+    return this._blockchain;
+  }
+
   findConnector({ walletType }) {
-    return this._connectors.find((v) => {
+    return this._connectors
+      .filter((v) => !!v)
+      .find((v) => {
       return v.type = walletType;
     })
   }
@@ -49,11 +61,12 @@ class Lunar {
       this._connector = newConnector;
     }
     this._blockchain = await this._connector.connect({ blockchain });
-    return this.isConnected;
+    return this.address;
   }
 
   async switchBlockchain({ chainId }) {
-    this._connector._switchBlockchain({ chainId });
+    awaitthis._connector._switchBlockchain({ chainId });
+    return this.address;
   }
 
   async disconnect() {
