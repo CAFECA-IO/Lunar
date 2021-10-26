@@ -4,7 +4,11 @@ module.exports = {
   entry: ['regenerator-runtime/runtime.js',  './src/lunar.js'],
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'lunar.js'
+    filename: 'lunar.js',
+    libraryTarget: 'umd',
+    library: 'Lunar',
+    libraryExport: 'default',
+    globalObject: 'this'
   },
   module: {
     rules: [
