@@ -107,6 +107,5 @@ if(window) {
   window.lunar.send({ to: '0xd8a149a2E906613CB1e5c0FFf675AF2636Cf77bF', amount: '0.001' });
    */
 }
-else {
-  module.exports = Lunar;
-}
+
+export default Lunar;
