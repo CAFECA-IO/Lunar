@@ -164,6 +164,22 @@ class Metamask extends Connector {
       return Promise.resolve({ name, symbol, decimals, totalSupply });
     })
   }
+  async getAllowance({ contract, owner, spender } = {}) {
+    let allowance;
+    if(!contract) {
+      return Promise.resolve('0');
+    }
+
+    return Promise.all([
+      this.getData({ contract, func: 'allowance(address,address)', params: [owner, spender] }),
+      this.getDecimals({ contract })
+    ])
+    .then(([ _allowance, _decimals ]) => {
+      console.log(_allowance, _decimals);
+      const allowance = (new BigNumber(_allowance).dividedBy(new BigNumber(10).pow(_decimals))).toString();
+      return Promise.resolve(allowance);
+    })
+  }
 
   async _connect({ blockchain }) {
     const requestData = {
