@@ -48,7 +48,8 @@ class Metamask extends Connector {
       return ethereum.request(requestData);
     } else {
       let _data = SmartContract.toContractData({ func, params });
-      return this.getData({ contract, data: _data });
+      const result = await this.getData({ contract, data: _data });
+      return result;
     }
   }
 
@@ -66,7 +67,7 @@ class Metamask extends Connector {
       params: [address_, "latest"]
     }
     return ethereum.request(requestData).then((rs) => {
-      const balance = new BigNumber(rs).dividedBy(new BigNumber(10).pow(18));
+      const balance = (new BigNumber(rs).dividedBy(new BigNumber(10).pow(18))).toString();
       return balance;
     })
   }
@@ -81,7 +82,7 @@ class Metamask extends Connector {
       this.getDecimals({ contract })
     ])
     .then(([ _balance, _decimals ]) => {
-      const balance = new BigNumber(_balance).dividedBy(new BigNumber(10).pow(_decimals));
+      const balance = (new BigNumber(_balance).dividedBy(new BigNumber(10).pow(_decimals))).toString();
       return Promise.resolve(balance);
     })
   }
@@ -120,13 +121,29 @@ class Metamask extends Connector {
       return Promise.resolve(result);
     })
   }
-  async getAsset({ contract } = {}) {
+  async getTotalSupply({ contract }) {
+    let totalSupply;
+    if(!contract) {
+      return Promise.resolve('0');
+    }
+
     return Promise.all([
-      this.getSymbol({ contract }),
+      this.getData({ contract, func: 'totalSupply()' }),
       this.getDecimals({ contract })
     ])
-    .then(([ symbol, decimals ]) => {
-      return Promise.resolve({ symbol, decimals });
+    .then(([ _totalSupply, _decimals ]) => {
+      const totalSupply = (new BigNumber(_totalSupply).dividedBy(new BigNumber(10).pow(_decimals))).toString();
+      return Promise.resolve(totalSupply);
+    })
+  }
+  async getAsset({ contract, decimals } = {}) {
+    return Promise.all([
+      this.getSymbol({ contract }),
+      this.getDecimals({ contract }),
+      this.getTotalSupply({ contract })
+    ])
+    .then(([ symbol, decimals, totalSupply ]) => {
+      return Promise.resolve({ symbol, decimals, totalSupply });
     })
   }
 
