@@ -81,6 +81,10 @@ class Lunar {
     return this._connector.getBalance({ contract, address });
   }
 
+  async getAllowance({ contract, owner, spender }) {
+    return this._connector.getAllowance({ contract, owner, spender });
+  }
+
   async getData({ contract, func, params, data }) {
     return this._connector.getData({ contract, func, params, data });
   }
