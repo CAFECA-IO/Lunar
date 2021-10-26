@@ -39,6 +39,24 @@ class SmartContract {
     return result;
   }
 
+  static parseHexRLP(data) {
+    let seed = data;
+    let chunks;
+    let result;
+    if(seed.indexOf('0x') == '0') {
+      seed = seed.substr(2);
+    }
+  
+    if(seed.length > 64) {
+      chunks = Utils.chunkSubstr(seed, 64);
+    } else {
+      chunks = [seed];
+    }
+
+    result = chunks;
+    return result;
+  }
+
   static toSmallestUnitHex({ amount, decimals }) {
     const result = new BigNumber(amount)
       .multipliedBy(new BigNumber(10).pow(decimals))

@@ -104,6 +104,23 @@ class Metamask extends Connector {
       return Promise.resolve(result);
     })
   }
+  async getName({ contract } = {}) {
+    let symbol;
+    if(!contract) {
+      try {
+        symbol = this.blockchain.nativeCurrency.symbol;
+      }
+      catch(e) {
+        symbol = 'ETH';
+      }
+      return Promise.resolve(symbol);
+    }
+
+    return this.getData({ contract, func: 'name()' }).then((rs) => {
+      const result = SmartContract.parseString(rs);
+      return Promise.resolve(result);
+    })
+  }
   async getSymbol({ contract } = {}) {
     let symbol;
     if(!contract) {
@@ -121,7 +138,7 @@ class Metamask extends Connector {
       return Promise.resolve(result);
     })
   }
-  async getTotalSupply({ contract }) {
+  async getTotalSupply({ contract } = {}) {
     let totalSupply;
     if(!contract) {
       return Promise.resolve('0');
@@ -138,12 +155,13 @@ class Metamask extends Connector {
   }
   async getAsset({ contract, decimals } = {}) {
     return Promise.all([
+      this.getName({ contract }),
       this.getSymbol({ contract }),
       this.getDecimals({ contract }),
       this.getTotalSupply({ contract })
     ])
-    .then(([ symbol, decimals, totalSupply ]) => {
-      return Promise.resolve({ symbol, decimals, totalSupply });
+    .then(([ name, symbol, decimals, totalSupply ]) => {
+      return Promise.resolve({ name, symbol, decimals, totalSupply });
     })
   }
 
