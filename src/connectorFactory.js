@@ -9,7 +9,6 @@ class ConnectorFactory {
   }
 
   static create(wallet = '') {
-    console.log(`create ${wallet}`);
     let connector;
     switch(wallet) {
       case Wallets.TideWallet:

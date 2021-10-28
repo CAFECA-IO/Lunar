@@ -23,9 +23,10 @@ npm run build
 const lunar = new Lunar();
 
 // regist notification
-lunar.on((event) => {
+lunar.on((event, data) => {
   // ready, connected, disconnected
   console.log(event);
+  console.log(data);
 });
 
 // get environment information return { platform, wallets }

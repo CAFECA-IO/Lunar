@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import Blockchains from './constants/blockchain.js';
 import Wallets from './constants/wallets.js';
 import ConnectorFactory from './connectorFactory.js';
@@ -10,8 +11,10 @@ class Lunar {
   _connector;
   _connectors = [];
   _blockchain;
+  _eventEmitter;
 
   constructor() {
+    this._eventEmitter = new EventEmitter();
     this._connector = ConnectorFactory.create();
   }
 
@@ -36,6 +39,10 @@ class Lunar {
 
   get blockchain() {
     return this._blockchain;
+  }
+
+  on(event, callback) {
+    return 
   }
 
   findConnector({ walletType }) {
