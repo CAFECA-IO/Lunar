@@ -7,6 +7,7 @@ class Blockchains {
     },
     rpcUrls: [ "https://api.avax.network/ext/bc/C/rpc" ],
     blockExplorerUrls: [ "https://cchain.explorer.avax.network/" ],
+    isTestnet: false,
   };
   static BSC = {
     chainId: "0x38",
@@ -16,6 +17,7 @@ class Blockchains {
     },
     rpcUrls: [ "https://bsc-dataseed.binance.org/" ],
     blockExplorerUrls: [ "https://bscscan.com/" ],
+    isTestnet: false,
   };
   static BSCTestnet = {
     chainId: "0x61",
@@ -25,6 +27,7 @@ class Blockchains {
     },
     rpcUrls: [ "https://data-seed-prebsc-1-s1.binance.org:8545/" ],
     blockExplorerUrls: [ "https://testnet.bscscan.com" ],
+    isTestnet: true,
   };
   static Ethereum = {
     chainId: "0x1",
@@ -33,15 +36,17 @@ class Blockchains {
       symbol: "ETH",
       decimals: 18,
     },
+    isTestnet: false,
   };
-  static FUJI = {
+  static AvaxTestnet = {
     chainId: "0xa869",
-    chainName: "Avalanche Network",
+    chainName: "Avalanche Testnet FUJI",
     nativeCurrency: {
       symbol: "AVAX",
     },
     rpcUrls: [ "https://api.avax-test.network/ext/bc/C/rpc" ],
     blockExplorerUrls: [ "https://cchain.explorer.avax-test.network" ],
+    isTestnet: true,
   };
   static Huobi = {
     chainId: "0x80",
@@ -51,6 +56,7 @@ class Blockchains {
     },
     rpcUrls: [ "https://http-mainnet-node.huobichain.com/" ],
     blockExplorerUrls: [ "https://hecoinfo.com/" ],
+    isTestnet: false,
   };
   static HuobiTestnet = {
     chainId: "0x100",
@@ -60,8 +66,9 @@ class Blockchains {
     },
     rpcUrls: [ "https://http-testnet.hecochain.com/" ],
     blockExplorerUrls: [ "https://scan-testnet.hecochain.com" ],
+    isTestnet: true,
   }
-  static Matic = {
+  static Polygon = {
     chainId: "0x89",
     chainName: "Polygon",
     nativeCurrency: {
@@ -69,6 +76,7 @@ class Blockchains {
     },
     rpcUrls: [ "https://rpc-mainnet.maticvigil.com/" ],
     blockExplorerUrls: [ "https://explorer.matic.network/" ],
+    isTestnet: false,
   };
   static Mumbai = {
     chainId: "0x13881",
@@ -78,14 +86,16 @@ class Blockchains {
     },
     rpcUrls: [ "https://rpc-mumbai.maticvigil.com/" ],
     blockExplorerUrls: [ "https://mumbai-explorer.matic.today/" ],
+    isTestnet: true,
   }
-  static Ropsten = {
+  static EthereumTestnet = {
     chainId: "0x3",
     chainName: "ETH testnet Ropsten",
     nativeCurrency: {
       symbol: "ETH",
       decimals: 18,
     },
+    isTestnet: true,
   };
   static Tidetime = {
     chainId: "0x1f51",
@@ -97,7 +107,8 @@ class Blockchains {
     },
     rpcUrls: [ "https://rpc.tidebit.network" ],
     blockExplorerUrls: [ "https://explorer.tidebit.network" ],
-    iconUrls: [ "https://iconape.com/wp-content/png_logo_vector/tidebit.png" ]
+    iconUrls: [ "https://iconape.com/wp-content/png_logo_vector/tidebit.png" ],
+    isTestnet: false,
   };
   static xDAI = {
     chainId: "0x64",
@@ -107,14 +118,18 @@ class Blockchains {
     },
     rpcUrls: [ "https://rpc.xdaichain.com/" ],
     blockExplorerUrls: [ "https://blockscout.com/xdai/mainnet" ],
+    isTestnet: false,
   };
-
-  static AvaxTestnet = this.FUJI;
-  static EthereumTestnet = this.Ropsten;
-  static Polygon = this.Matic;
 
   static get keys() {
     return Object.keys(this);
+  }
+  static list({ testnet }) {
+    const result = this.keys
+      .map((v) => Blockchains[v])
+      .filter((v) => !(v.isTestnet ^ testnet))
+
+    return result;
   }
   static findByChainId(chainId = '') {
     let searchKey = chainId.toString(16);

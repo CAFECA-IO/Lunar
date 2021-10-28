@@ -7,6 +7,9 @@ import Environment from './environment.js'
 class Lunar {
   static Blockchains = Blockchains;
   static Wallets = Wallets;
+  static listBlockchain({ testnet } = {}) {
+    return Blockchains.list({ testnet });
+  }
 
   _connector;
   _connectors = [];
