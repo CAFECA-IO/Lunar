@@ -74,8 +74,8 @@ class Lunar {
     return this.address;
   }
 
-  async switchBlockchain({ chainId }) {
-    await this._connector._switchBlockchain({ chainId });
+  async switchBlockchain({ blockchain }) {
+    await this._connector._switchBlockchain({ blockchain });
     return this.address;
   }
 
