@@ -1,4 +1,4 @@
-import Wallets from './constants/wallets';
+import Wallets from '../constants/wallets';
 
 class Environment {
   static getPlatform() {

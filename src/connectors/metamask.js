@@ -37,7 +37,8 @@ class Metamask extends Connector {
 
   async getData({ contract, data, func, params }) {
     if(data) {
-      console.log(contract, data);
+      console.log(`contract: ${contract}`); //--
+      console.log(`request: ${data}`); //--
       const requestData = {
         method: 'eth_call',
         params: [{
@@ -175,7 +176,6 @@ class Metamask extends Connector {
       this.getDecimals({ contract })
     ])
     .then(([ _allowance, _decimals ]) => {
-      console.log(_allowance, _decimals);
       const allowance = (new BigNumber(_allowance).dividedBy(new BigNumber(10).pow(_decimals))).toString();
       return Promise.resolve(allowance);
     })
