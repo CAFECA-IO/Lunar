@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 import Blockchains from './constants/blockchain.js';
 import Wallets from './constants/wallets.js';
-import ConnectorFactory from './connectorFactory.js';
-import Environment from './environment.js'
+import ConnectorFactory from './connectors/connectorFactory.js';
+import Environment from './libs/environment.js'
 
 class Lunar {
   static Blockchains = Blockchains;
@@ -75,7 +75,7 @@ class Lunar {
   }
 
   async switchBlockchain({ chainId }) {
-    awaitthis._connector._switchBlockchain({ chainId });
+    await this._connector._switchBlockchain({ chainId });
     return this.address;
   }
 
