@@ -189,27 +189,32 @@ class Metamask extends Connector {
       this._blockchain = blockchain;
       this._address = rs[0];
       this._isConnected = true;
-      return this._switchBlockchain(blockchain);
+      return this._switchBlockchain({ blockchain });
     });
   }
   async _addBlockchain({ blockchain }) {
-    const chainId = parseInt(blockchain.chainId);
+    const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } = blockchain;
+    const searchChainId = parseInt(chainId);
     const exceptChainId = [1, 3, 4, 5, 42];
-    if(exceptChainId.indexOf(chainId) > -1) {
+    if(exceptChainId.indexOf(searchChainId) > -1) {
       return true;
     }
+
     const requestData = {
       method: 'wallet_addEthereumChain',
-      params: [ blockchain ],
+      params: [ { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } ],
     };
     return ethereum.request(requestData);
   }
-  async _switchBlockchain({ chainId }) {
-    const requestData = {
-      method: 'wallet_switchEthereumChain',
-      params:[ { chainId } ]
-    };
-    return ethereum.request(requestData);
+  async _switchBlockchain({ blockchain }) {
+    return this._addBlockchain({ blockchain })
+    .then(() => {
+      const requestData = {
+        method: 'wallet_switchEthereumChain',
+        params:[ { chainId: blockchain.chainId } ]
+      };
+      return ethereum.request(requestData);
+    })
   }
 }
 

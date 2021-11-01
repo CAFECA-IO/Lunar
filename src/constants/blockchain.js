@@ -4,6 +4,7 @@ class Blockchains {
     chainName: "Avalanche Network",
     nativeCurrency: {
       symbol: "AVAX",
+      decimals: 18,
     },
     rpcUrls: [ "https://api.avax.network/ext/bc/C/rpc" ],
     blockExplorerUrls: [ "https://cchain.explorer.avax.network/" ],
@@ -14,6 +15,7 @@ class Blockchains {
     chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
       symbol: "BNB",
+      decimals: 18,
     },
     rpcUrls: [ "https://bsc-dataseed.binance.org/" ],
     blockExplorerUrls: [ "https://bscscan.com/" ],
@@ -24,6 +26,7 @@ class Blockchains {
     chainName: "Binance Smart Chain Testnet",
     nativeCurrency: {
       symbol: "BNB",
+      decimals: 18,
     },
     rpcUrls: [ "https://data-seed-prebsc-1-s1.binance.org:8545/" ],
     blockExplorerUrls: [ "https://testnet.bscscan.com" ],
@@ -43,6 +46,7 @@ class Blockchains {
     chainName: "Avalanche Testnet FUJI",
     nativeCurrency: {
       symbol: "AVAX",
+      decimals: 18,
     },
     rpcUrls: [ "https://api.avax-test.network/ext/bc/C/rpc" ],
     blockExplorerUrls: [ "https://cchain.explorer.avax-test.network" ],
@@ -53,6 +57,7 @@ class Blockchains {
     chainName: "HuobiChain",
     nativeCurrency: {
       symbol: "HT",
+      decimals: 18,
     },
     rpcUrls: [ "https://http-mainnet-node.huobichain.com/" ],
     blockExplorerUrls: [ "https://hecoinfo.com/" ],
@@ -63,6 +68,7 @@ class Blockchains {
     chainName: "HuobiChain Testnet",
     nativeCurrency: {
       symbol: "HT",
+      decimals: 18,
     },
     rpcUrls: [ "https://http-testnet.hecochain.com/" ],
     blockExplorerUrls: [ "https://scan-testnet.hecochain.com" ],
@@ -73,6 +79,7 @@ class Blockchains {
     chainName: "Polygon",
     nativeCurrency: {
       symbol: "MATIC",
+      decimals: 18,
     },
     rpcUrls: [ "https://rpc-mainnet.maticvigil.com/" ],
     blockExplorerUrls: [ "https://explorer.matic.network/" ],
@@ -83,6 +90,7 @@ class Blockchains {
     chainName: "Polygon Testnet",
     nativeCurrency: {
       symbol: "MATIC",
+      decimals: 18,
     },
     rpcUrls: [ "https://rpc-mumbai.maticvigil.com/" ],
     blockExplorerUrls: [ "https://mumbai-explorer.matic.today/" ],
@@ -115,6 +123,7 @@ class Blockchains {
     chainName: "xDai",
     nativeCurrency: {
       symbol: "xDAI",
+      decimals: 18,
     },
     rpcUrls: [ "https://rpc.xdaichain.com/" ],
     blockExplorerUrls: [ "https://blockscout.com/xdai/mainnet" ],
