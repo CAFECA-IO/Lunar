@@ -7,9 +7,6 @@ class Metamask extends Connector {
   _type = Wallets.Metamask;
 
   async connect({ blockchain }) {
-    if(blockchain) {
-      await this._addBlockchain({ blockchain });
-    }
     return this._connect({ blockchain });
   }
 
@@ -37,8 +34,6 @@ class Metamask extends Connector {
 
   async getData({ contract, data, func, params }) {
     if(data) {
-      console.log(`contract: ${contract}`); //--
-      console.log(`request: ${data}`); //--
       const requestData = {
         method: 'eth_call',
         params: [{
@@ -189,8 +184,18 @@ class Metamask extends Connector {
       this._blockchain = blockchain;
       this._address = rs[0];
       this._isConnected = true;
-      return this._switchBlockchain({ blockchain });
+      return this.switchBlockchain({ blockchain });
     });
+  }
+  async switchBlockchain({ blockchain }) {
+    return this._addBlockchain({ blockchain })
+    .then(() => {
+      const requestData = {
+        method: 'wallet_switchEthereumChain',
+        params:[ { chainId: blockchain.chainId } ]
+      };
+      return ethereum.request(requestData);
+    })
   }
   async _addBlockchain({ blockchain }) {
     const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } = blockchain;
@@ -205,16 +210,6 @@ class Metamask extends Connector {
       params: [ { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } ],
     };
     return ethereum.request(requestData);
-  }
-  async _switchBlockchain({ blockchain }) {
-    return this._addBlockchain({ blockchain })
-    .then(() => {
-      const requestData = {
-        method: 'wallet_switchEthereumChain',
-        params:[ { chainId: blockchain.chainId } ]
-      };
-      return ethereum.request(requestData);
-    })
   }
 }
 
