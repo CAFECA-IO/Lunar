@@ -19,6 +19,15 @@ npm run build
 
 ## How to Use
 ```javascript
+// check version
+const version = Lunar.version;
+
+// list support blockchain(Mainnet)
+const blockchains = Lunar.listBlockchain({ testnet: false });
+
+// list support blockchain(Testnet)
+const blockchains = Lunar.listBlockchain({ testnet: true });
+
 // initial
 const lunar = new Lunar();
 
