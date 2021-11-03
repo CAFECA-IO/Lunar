@@ -2,7 +2,8 @@ import { EventEmitter } from 'events';
 import Blockchains from './constants/blockchain.js';
 import Wallets from './constants/wallets.js';
 import ConnectorFactory from './connectors/connectorFactory.js';
-import Environment from './libs/environment.js'
+import Environment from './libs/environment.js';
+import { version } from '../package.json';
 
 class Lunar {
   static Blockchains = Blockchains;
@@ -10,6 +11,7 @@ class Lunar {
   static listBlockchain({ testnet } = {}) {
     return Blockchains.list({ testnet });
   }
+  static version = `v${version}`;
 
   _connector;
   _connectors = [];

@@ -1,6 +1,6 @@
 {
   "name": "@cafeca/lunar",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Blockchain Connect Module",
   "main": "./build/lunar.js",
   "scripts": {

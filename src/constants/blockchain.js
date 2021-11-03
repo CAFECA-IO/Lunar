@@ -1,6 +1,7 @@
 class Blockchains {
   static Avax = {
     chainId: "0xa86a",
+    key: "Avax",
     chainName: "Avalanche Network",
     nativeCurrency: {
       symbol: "AVAX",
@@ -12,6 +13,7 @@ class Blockchains {
   };
   static BSC = {
     chainId: "0x38",
+    key: "BSC",
     chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
       symbol: "BNB",
@@ -23,6 +25,7 @@ class Blockchains {
   };
   static BSCTestnet = {
     chainId: "0x61",
+    key: "BSCTestnet",
     chainName: "Binance Smart Chain Testnet",
     nativeCurrency: {
       symbol: "BNB",
@@ -34,6 +37,7 @@ class Blockchains {
   };
   static Ethereum = {
     chainId: "0x1",
+    key: "Ethereum",
     chainName: "Ethereum",
     nativeCurrency: {
       symbol: "ETH",
@@ -43,6 +47,7 @@ class Blockchains {
   };
   static AvaxTestnet = {
     chainId: "0xa869",
+    key: "AvaxTestnet",
     chainName: "Avalanche Testnet FUJI",
     nativeCurrency: {
       symbol: "AVAX",
@@ -54,6 +59,7 @@ class Blockchains {
   };
   static Huobi = {
     chainId: "0x80",
+    key: "Huobi",
     chainName: "HuobiChain",
     nativeCurrency: {
       symbol: "HT",
@@ -65,6 +71,7 @@ class Blockchains {
   };
   static HuobiTestnet = {
     chainId: "0x100",
+    key: "HuobiTestnet",
     chainName: "HuobiChain Testnet",
     nativeCurrency: {
       symbol: "HT",
@@ -76,6 +83,7 @@ class Blockchains {
   }
   static Polygon = {
     chainId: "0x89",
+    key: "Polygon",
     chainName: "Polygon",
     nativeCurrency: {
       symbol: "MATIC",
@@ -85,9 +93,10 @@ class Blockchains {
     blockExplorerUrls: [ "https://explorer.matic.network/" ],
     isTestnet: false,
   };
-  static Mumbai = {
+  static PolygonTestnet = {
     chainId: "0x13881",
-    chainName: "Polygon Testnet",
+    key: "PolygonTestnet",
+    chainName: "Polygon Testnet Mumbai",
     nativeCurrency: {
       symbol: "MATIC",
       decimals: 18,
@@ -98,6 +107,7 @@ class Blockchains {
   }
   static EthereumTestnet = {
     chainId: "0x3",
+    key: "EthereumTestnet",
     chainName: "ETH testnet Ropsten",
     nativeCurrency: {
       symbol: "ETH",
@@ -107,6 +117,7 @@ class Blockchains {
   };
   static Tidetime = {
     chainId: "0x1f51",
+    key: "Tidetime",
     chainName: "Tidetime",
     nativeCurrency: {
       name: "Tidetime Token",
@@ -120,6 +131,7 @@ class Blockchains {
   };
   static xDAI = {
     chainId: "0x64",
+    key: "xDAI",
     chainName: "xDai",
     nativeCurrency: {
       symbol: "xDAI",
