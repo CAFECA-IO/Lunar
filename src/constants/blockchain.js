@@ -1,9 +1,11 @@
 class Blockchains {
   static Avax = {
     chainId: "0xa86a",
+    key: "Avax",
     chainName: "Avalanche Network",
     nativeCurrency: {
       symbol: "AVAX",
+      decimals: 18,
     },
     rpcUrls: [ "https://api.avax.network/ext/bc/C/rpc" ],
     blockExplorerUrls: [ "https://cchain.explorer.avax.network/" ],
@@ -11,26 +13,50 @@ class Blockchains {
   };
   static BSC = {
     chainId: "0x38",
+    key: "BSC",
     chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
       symbol: "BNB",
+      decimals: 18,
     },
-    rpcUrls: [ "https://bsc-dataseed.binance.org/" ],
+    rpcUrls: [
+      "https://bsc-dataseed.binance.org/",
+      "https://bsc-dataseed1.binance.org/",
+      "https://bsc-dataseed2.binance.org/",
+      "https://bsc-dataseed3.binance.org/",
+      "https://bsc-dataseed4.binance.org/",
+      "https://bsc-dataseed1.defibit.io/",
+      "https://bsc-dataseed2.defibit.io/",
+      "https://bsc-dataseed3.defibit.io/",
+      "https://bsc-dataseed4.defibit.io/",
+      "https://bsc-dataseed1.ninicoin.io/",
+      "https://bsc-dataseed2.ninicoin.io/",
+      "https://bsc-dataseed3.ninicoin.io/",
+      "https://bsc-dataseed4.ninicoin.io/"
+    ],
     blockExplorerUrls: [ "https://bscscan.com/" ],
     isTestnet: false,
   };
   static BSCTestnet = {
     chainId: "0x61",
+    key: "BSCTestnet",
     chainName: "Binance Smart Chain Testnet",
     nativeCurrency: {
       symbol: "BNB",
+      decimals: 18,
     },
-    rpcUrls: [ "https://data-seed-prebsc-1-s1.binance.org:8545/" ],
+    rpcUrls: [
+      "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      "https://data-seed-prebsc-2-s1.binance.org:8545/",
+      "https://data-seed-prebsc-1-s3.binance.org:8545/",
+      "https://data-seed-prebsc-2-s3.binance.org:8545/"
+    ],
     blockExplorerUrls: [ "https://testnet.bscscan.com" ],
     isTestnet: true,
   };
   static Ethereum = {
     chainId: "0x1",
+    key: "Ethereum",
     chainName: "Ethereum",
     nativeCurrency: {
       symbol: "ETH",
@@ -40,9 +66,11 @@ class Blockchains {
   };
   static AvaxTestnet = {
     chainId: "0xa869",
+    key: "AvaxTestnet",
     chainName: "Avalanche Testnet FUJI",
     nativeCurrency: {
       symbol: "AVAX",
+      decimals: 18,
     },
     rpcUrls: [ "https://api.avax-test.network/ext/bc/C/rpc" ],
     blockExplorerUrls: [ "https://cchain.explorer.avax-test.network" ],
@@ -50,9 +78,11 @@ class Blockchains {
   };
   static Huobi = {
     chainId: "0x80",
+    key: "Huobi",
     chainName: "HuobiChain",
     nativeCurrency: {
       symbol: "HT",
+      decimals: 18,
     },
     rpcUrls: [ "https://http-mainnet-node.huobichain.com/" ],
     blockExplorerUrls: [ "https://hecoinfo.com/" ],
@@ -60,9 +90,11 @@ class Blockchains {
   };
   static HuobiTestnet = {
     chainId: "0x100",
+    key: "HuobiTestnet",
     chainName: "HuobiChain Testnet",
     nativeCurrency: {
       symbol: "HT",
+      decimals: 18,
     },
     rpcUrls: [ "https://http-testnet.hecochain.com/" ],
     blockExplorerUrls: [ "https://scan-testnet.hecochain.com" ],
@@ -70,19 +102,23 @@ class Blockchains {
   }
   static Polygon = {
     chainId: "0x89",
+    key: "Polygon",
     chainName: "Polygon",
     nativeCurrency: {
       symbol: "MATIC",
+      decimals: 18,
     },
     rpcUrls: [ "https://rpc-mainnet.maticvigil.com/" ],
     blockExplorerUrls: [ "https://explorer.matic.network/" ],
     isTestnet: false,
   };
-  static Mumbai = {
+  static PolygonTestnet = {
     chainId: "0x13881",
-    chainName: "Polygon Testnet",
+    key: "PolygonTestnet",
+    chainName: "Polygon Testnet Mumbai",
     nativeCurrency: {
       symbol: "MATIC",
+      decimals: 18,
     },
     rpcUrls: [ "https://rpc-mumbai.maticvigil.com/" ],
     blockExplorerUrls: [ "https://mumbai-explorer.matic.today/" ],
@@ -90,6 +126,7 @@ class Blockchains {
   }
   static EthereumTestnet = {
     chainId: "0x3",
+    key: "EthereumTestnet",
     chainName: "ETH testnet Ropsten",
     nativeCurrency: {
       symbol: "ETH",
@@ -99,6 +136,7 @@ class Blockchains {
   };
   static Tidetime = {
     chainId: "0x1f51",
+    key: "Tidetime",
     chainName: "Tidetime",
     nativeCurrency: {
       name: "Tidetime Token",
@@ -112,9 +150,11 @@ class Blockchains {
   };
   static xDAI = {
     chainId: "0x64",
+    key: "xDAI",
     chainName: "xDai",
     nativeCurrency: {
       symbol: "xDAI",
+      decimals: 18,
     },
     rpcUrls: [ "https://rpc.xdaichain.com/" ],
     blockExplorerUrls: [ "https://blockscout.com/xdai/mainnet" ],
