@@ -54,18 +54,16 @@ class Lunar {
     return this._connectors
       .filter((v) => !!v)
       .find((v) => {
-      return v.type = walletType;
-    })
+        return v.type == walletType;
+      })
   }
 
   async connect({ wallet, blockchain } = {}) {
     if(this.isConnected) {
       return true;
     }
-
     const defaultWallet = this.env.wallets[0];
     const walletType = (wallet || defaultWallet);
-
     this._connector = this.findConnector({ walletType });
     if(!(this._connector)) {
       const newConnector = ConnectorFactory.create(walletType);

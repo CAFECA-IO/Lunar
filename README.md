@@ -49,7 +49,7 @@ const isConnected = lunar.isConnected
 const walletList = lunar.env.wallets;
 
 // connect with injected javascript
-lunar.connect({ wallet: Lunar.Wallets.Metamask, blockchain: Lunar.Blockchains.Ropsten });
+lunar.connect({ wallet: Lunar.Wallets.Metamask, blockchain: Lunar.Blockchains.EthereumTestnet });
 
 // switch blockchain
 lunar.switchBlockchain(Lunar.Blockchains.AvaxTestnet);
