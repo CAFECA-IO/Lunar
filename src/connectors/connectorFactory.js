@@ -20,8 +20,8 @@ class ConnectorFactory {
       break;
 
       case Wallets.Metamask:
+      default:
         connector = new Metamask();
-      default:  
     }
     return connector;
   }
