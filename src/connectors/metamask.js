@@ -5,6 +5,12 @@ import BigNumber from '../libs/bignumber.js';
 
 class Metamask extends Connector {
   _type = Wallets.Metamask;
+  _chainId;
+
+  constructor() {
+    super();
+    this._chainId = ethereum.chainId;
+  }
 
   async connect({ blockchain }) {
     return this._connect({ blockchain });
@@ -194,7 +200,11 @@ class Metamask extends Connector {
         method: 'wallet_switchEthereumChain',
         params:[ { chainId: blockchain.chainId } ]
       };
-      return ethereum.request(requestData);
+      return ethereum.request(requestData)
+    })
+    .then((rs) => {
+      this._chainId = ethereum.chainId;
+      return rs;
     })
   }
   async _addBlockchain({ blockchain }) {

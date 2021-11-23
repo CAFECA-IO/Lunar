@@ -11,6 +11,9 @@ class Lunar {
   static listBlockchain({ testnet } = {}) {
     return Blockchains.list({ testnet });
   }
+  static findBlockchain({ chainId } = {}) {
+    return Blockchains.findByChainId(chainId);
+  }
   static version = `v${version}`;
 
   _connector;
@@ -97,6 +100,11 @@ class Lunar {
 
   async getData({ contract, func, params, data }) {
     return this._connector.getData({ contract, func, params, data });
+  }
+
+  async getChain() {
+    const chainId = this._connector.chainId;
+    return Lunar.findBlockchain(chainId);
   }
 
   async send({ to, amount, data }) {
