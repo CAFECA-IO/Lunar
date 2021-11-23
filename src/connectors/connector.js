@@ -17,6 +17,9 @@ class Connector {
   get type() {
     return this._type;
   }
+  get chainId() {
+    return this.blockchain.chainId;
+  }
   get wallet() {}
 
   async init() {}

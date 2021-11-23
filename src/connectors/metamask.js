@@ -1,10 +1,22 @@
 import Wallets from '../constants/wallets.js';
-import Connector from './connector.js'
-import SmartContract from '../libs/smartcontract.js'
+import Connector from './connector.js';
+import SmartContract from '../libs/smartcontract.js';
 import BigNumber from '../libs/bignumber.js';
+import Blockchains from '../constants/blockchain.js';
 
 class Metamask extends Connector {
   _type = Wallets.Metamask;
+
+  constructor() {
+    super();
+    try {
+      const chainId = ethereum.chainId;
+      this._blockchain = Blockchains.findByChainId(chainId);
+    }
+    catch(e) {
+      console.trace(e);
+    }
+  }
 
   async connect({ blockchain }) {
     return this._connect({ blockchain });
@@ -22,12 +34,13 @@ class Metamask extends Connector {
       to,
       value,
       data,
-      chainId: this._chainId
+      chainId: this.chainId
     }
     const requestData = {
       method: 'eth_sendTransaction',
       params: [ transactionParameters ],
     };
+    console.log(requestData)
     const txHash = await ethereum.request(requestData);
     return txHash;
   }
@@ -194,7 +207,7 @@ class Metamask extends Connector {
         method: 'wallet_switchEthereumChain',
         params:[ { chainId: blockchain.chainId } ]
       };
-      return ethereum.request(requestData);
+      return ethereum.request(requestData)
     })
   }
   async _addBlockchain({ blockchain }) {

@@ -148,7 +148,7 @@ class Blockchains {
   static list({ testnet }) {
     const result = this.keys
       .map((v) => Blockchains[v])
-      .filter((v) => !(v.isTestnet ^ testnet))
+      .filter((v) => testnet == undefined || !(v.isTestnet ^ testnet))
 
     return result;
   }
