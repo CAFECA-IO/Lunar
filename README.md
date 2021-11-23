@@ -22,6 +22,9 @@ npm run build
 // check version
 const version = Lunar.version;
 
+// list all blockchain
+const blockchains = Lunar.listBlockchain();
+
 // list support blockchain(Mainnet)
 const blockchains = Lunar.listBlockchain({ testnet: false });
 
@@ -30,6 +33,9 @@ const blockchains = Lunar.listBlockchain({ testnet: true });
 
 // initial
 const lunar = new Lunar();
+
+// get current blockchain
+const blockchain = lunar.blockchain;
 
 // regist notification
 lunar.on((event, data) => {

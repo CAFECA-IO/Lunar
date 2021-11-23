@@ -18,7 +18,6 @@ class Lunar {
 
   _connector;
   _connectors = [];
-  _blockchain;
   _eventEmitter;
 
   constructor() {
@@ -46,7 +45,10 @@ class Lunar {
   }
 
   get blockchain() {
-    return this._blockchain;
+    if(!this._connector.blockchain) {
+      throw new Error('connection error with Lunar');
+    }
+    return this._connector.blockchain;
   }
 
   on(event, callback) {
@@ -72,8 +74,8 @@ class Lunar {
       const newConnector = ConnectorFactory.create(walletType);
       this._connectors.push(newConnector);
       this._connector = newConnector;
+      await this._connector.connect({ blockchain });
     }
-    this._blockchain = await this._connector.connect({ blockchain });
     return this.address;
   }
 
@@ -100,11 +102,6 @@ class Lunar {
 
   async getData({ contract, func, params, data }) {
     return this._connector.getData({ contract, func, params, data });
-  }
-
-  async getChain() {
-    const chainId = this._connector.chainId;
-    return Lunar.findBlockchain(chainId);
   }
 
   async send({ to, amount, data }) {
