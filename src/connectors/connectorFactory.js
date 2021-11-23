@@ -9,7 +9,7 @@ class ConnectorFactory {
   }
 
   static create(wallet = '') {
-    let connector;
+    let connector
     switch(wallet) {
       case Wallets.TideWallet:
         connector = new TideWallet();

@@ -11,11 +11,13 @@ class Lunar {
   static listBlockchain({ testnet } = {}) {
     return Blockchains.list({ testnet });
   }
+  static findBlockchain({ chainId } = {}) {
+    return Blockchains.findByChainId(chainId);
+  }
   static version = `v${version}`;
 
   _connector;
   _connectors = [];
-  _blockchain;
   _eventEmitter;
 
   constructor() {
@@ -43,7 +45,10 @@ class Lunar {
   }
 
   get blockchain() {
-    return this._blockchain;
+    if(!this._connector.blockchain) {
+      throw new Error('connection error with Lunar');
+    }
+    return this._connector.blockchain;
   }
 
   on(event, callback) {
@@ -69,8 +74,8 @@ class Lunar {
       const newConnector = ConnectorFactory.create(walletType);
       this._connectors.push(newConnector);
       this._connector = newConnector;
+      await this._connector.connect({ blockchain });
     }
-    this._blockchain = await this._connector.connect({ blockchain });
     return this.address;
   }
 
