@@ -45,14 +45,14 @@ class Metamask extends Connector {
     return txHash;
   }
 
-  async getData({ contract, data, func, params }) {
+  async getData({ contract, data, func, params, state = "latest" }) {
     if(data) {
       const requestData = {
         method: 'eth_call',
         params: [{
           to: contract,
           data
-        }]
+        }, state]
       };
       return ethereum.request(requestData);
     } else {
@@ -62,7 +62,7 @@ class Metamask extends Connector {
     }
   }
 
-  async getBalance({ contract, address } = {}) {
+  async getBalance({ contract, address, state = "latest" } = {}) {
     let address_ = address;
     if(!SmartContract.isEthereumAddress(address)) {
       address_ = this.address;
@@ -73,7 +73,7 @@ class Metamask extends Connector {
 
     const requestData = {
       method: "eth_getBalance",
-      params: [address_, "latest"]
+      params: [address_, state]
     }
     return ethereum.request(requestData).then((rs) => {
       const balance = (new BigNumber(rs).dividedBy(new BigNumber(10).pow(18))).toString();
@@ -81,13 +81,13 @@ class Metamask extends Connector {
     })
   }
 
-  async getContractBalance({ contract, address } = {}) {
+  async getContractBalance({ contract, address, state = "latest" } = {}) {
     let address_ = address;
     if(!SmartContract.isEthereumAddress(address)) {
       address_ = this.address;
     }
     return Promise.all([
-      this.getData({ contract, func: 'balanceOf(address)', params: [address_] }),
+      this.getData({ contract, func: 'balanceOf(address)', params: [address_], state }),
       this.getDecimals({ contract })
     ])
     .then(([ _balance, _decimals ]) => {
