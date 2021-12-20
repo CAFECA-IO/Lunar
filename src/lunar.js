@@ -45,10 +45,9 @@ class Lunar {
   }
 
   get blockchain() {
-    if(!this._connector.blockchain) {
-      throw new Error('connection error with Lunar');
-    }
-    return this._connector.blockchain;
+    return this._connector ?
+      this._connector.blockchain:
+      undefined;
   }
 
   on(event, callback) {
