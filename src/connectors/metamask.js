@@ -28,7 +28,7 @@ class Metamask extends Connector {
 
   async send({ from = this.address, to, amount, data }) {
     const decimals = await this.getDecimals();
-    const value = SmartContract.toSmallestUnit({ amount, decimals });
+    const value = SmartContract.toSmallestUnitHex({ amount, decimals });
     const transactionParameters = {
       from,
       to,
@@ -40,7 +40,6 @@ class Metamask extends Connector {
       method: 'eth_sendTransaction',
       params: [ transactionParameters ],
     };
-    console.log(requestData)
     const txHash = await ethereum.request(requestData);
     return txHash;
   }
