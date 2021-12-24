@@ -64,6 +64,13 @@ class SmartContract {
     return result;
   }
 
+  static toSmallestUnit({ amount, decimals }) {
+    const result = new BigNumber(amount)
+      .multipliedBy(new BigNumber(10).pow(decimals))
+      .toString();
+    return result;
+  }
+
   static toContractData({ func, params }) {
     if(!func) {
       return '0x'
