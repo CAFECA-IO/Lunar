@@ -47,15 +47,17 @@ class Utils {
 
     return result;
   }
-  static isHex(data) {
-    return /^0x[a-fA-F0-9]*$/.test(data);
+  static isHex(data, require0x = true) {
+    return require0x?
+      /^0x[a-fA-F0-9]*$/.test(data):
+      /^(0x)?[a-fA-F0-9]*$/.test(data);
   }
   static toHex(data) {
     let result;
     if(data == undefined) {
       result = '';
     }
-    else if(this.isHex(data)) {
+    else if(this.isHex(data, true)) {
       result = data.substr(2);
     }
     else if(Number.isInteger(data)) {
