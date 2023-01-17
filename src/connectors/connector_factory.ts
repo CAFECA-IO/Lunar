@@ -1,8 +1,8 @@
-import Wallets from '../constants/wallets.js';
-import TideWallet from './tidewallet.js';
-import ImToken from './imtoken.js';
-import Metamask from './metamask.js';
-import Connector from './connector.js';
+import Wallets from '../constants/wallets';
+import TideWallet from './tidewallet';
+import ImToken from './imtoken';
+import Metamask from './metamask';
+import Connector from './connector';
 
 class ConnectorFactory {
   static get types() {

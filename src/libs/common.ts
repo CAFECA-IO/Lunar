@@ -43,8 +43,8 @@ export const stringToHex = (data: string) => {
 
   seed = data;
   for(let i = 0; i < seed.length; i++) {
-    let code = seed.charCodeAt(i) + 1;
-    let tmpSqr = Math.ceil(Math.log(code) / Math.log(256));
+    const code = seed.charCodeAt(i) + 1;
+    const tmpSqr = Math.ceil(Math.log(code) / Math.log(256));
     sqr = tmpSqr > sqr ? tmpSqr : sqr;
     arr[i] = seed.charCodeAt(i).toString(16).padStart(tmpSqr * 2, '0');
   }
@@ -58,9 +58,9 @@ export const isHex = (data: string) => {
   return /^0x[a-fA-F0-9]*$/.test(data);
 }
 
-export const toHex = (data: any) => {
+export const toHex = (data: any): string => {
   let result;
-  if(data == undefined) {
+  if(data === undefined) {
     result = '';
   }
   else if(isHex(data)) {
@@ -69,13 +69,14 @@ export const toHex = (data: any) => {
   else if(Number.isInteger(data)) {
     const map = "0123456789abcdef";
     let hex = data === 0 ? "0" : "";
-    while (data !== 0) {
-        hex = map[data & 15] + hex;
-        data = data >>> 4;
+    let tmpInt = data;
+    while (tmpInt !== 0) {
+        hex = map[tmpInt % 16] + hex;
+        tmpInt = Math.floor(tmpInt / 16);
     }
     result = hex;
   }
-  else if(typeof data == 'string') {
+  else if(typeof data === 'string') {
     result = stringToHex(data);
   } else {
     result = '';

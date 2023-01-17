@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
-import Wallets from '../constants/wallets.js';
-import Connector from './connector.js';
-import SmartContract from '../libs/smartcontract.js';
+import Wallets from '../constants/wallets';
+import Connector from './connector';
+import SmartContract from '../libs/smartcontract';
 import Blockchains, { Blockchain } from '../constants/blockchains';
 
 declare let ethereum: any;
@@ -16,7 +16,7 @@ class Metamask extends Connector {
       this._blockchain = Blockchains.findByChainId(chainId);
     }
     catch(e) {
-      console.trace(e);
+      throw e;
     }
   }
 
@@ -59,7 +59,7 @@ class Metamask extends Connector {
       };
       return ethereum.request(requestData);
     } else {
-      let _data = func ?
+      const _data = func ?
         SmartContract.toContractData({ func, params }) :
         '';
       const result = await this.getData({ contract, data: _data });
@@ -68,12 +68,12 @@ class Metamask extends Connector {
   }
 
   async getContractBalance({ contract, address, state = "latest" } : { contract: string, address: string, state?: string }): Promise<string> {
-    let address_ = address;
+    let tmpAddress = address;
     if(!SmartContract.isEthereumAddress(address)) {
-      address_ = this.address;
+      tmpAddress = this.address;
     }
     return Promise.all([
-      this.getData({ contract, func: 'balanceOf(address)', params: [address_], state }),
+      this.getData({ contract, func: 'balanceOf(address)', params: [tmpAddress], state }),
       this.getDecimals({ contract })
     ])
     .then(([ _balance, _decimals ]) => {
@@ -82,18 +82,18 @@ class Metamask extends Connector {
     })
   }
 
-  async getBalance({ contract, address, state = "latest" } = { contract: '', address: '' }) {
-    const address_ = SmartContract.isEthereumAddress(address) ?
+  async getBalance({ contract = '', address = '', state = "latest" }) {
+    const tmpAddress = SmartContract.isEthereumAddress(address) ?
       address :
       this.address;
 
-    if(typeof(contract) == 'string') {
-      return this.getContractBalance({ contract, address: address_ || '' });
+    if(SmartContract.isEthereumAddress(contract)) {
+      return this.getContractBalance({ contract, address: tmpAddress || '' });
     }
 
     const requestData = {
       method: "eth_getBalance",
-      params: [address_, state]
+      params: [tmpAddress, state]
     }
     return ethereum.request(requestData).then((rs: BigNumber.Value) => {
       const balance = (new BigNumber(rs).dividedBy(new BigNumber(10).pow(18))).toString();
@@ -114,7 +114,7 @@ class Metamask extends Connector {
     }
 
     return this.getData({ contract, func: 'decimals()' }).then((rs) => {
-      const result = parseInt(rs);
+      const result = parseInt(rs, 10);
       return Promise.resolve(result);
     })
   }
@@ -153,7 +153,6 @@ class Metamask extends Connector {
     })
   }
   async getTotalSupply({ contract }  : { contract?: string } = {}) {
-    let totalSupply;
     if(!contract) {
       return Promise.resolve('0');
     }
@@ -167,7 +166,8 @@ class Metamask extends Connector {
       return Promise.resolve(totalSupply);
     })
   }
-  async getAsset({ contract, decimals }: { contract?: string, decimals?: number } = {}) {
+
+  async getAsset({ contract }: { contract?: string } = {}) {
     return Promise.all([
       this.getName({ contract }),
       this.getSymbol({ contract }),

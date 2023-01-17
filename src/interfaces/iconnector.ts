@@ -15,7 +15,7 @@ interface IConnector {
   get chainId(): number;
 
   init(): Promise<boolean>;
-  on(event:Event, callback:Function): void;
+  on(event:Event, callback: () => void): void;
   connect({ blockchain }: { blockchain?: IBlockchain }): Promise<boolean>;
   switchBlockchain({ blockchain }: { blockchain: IBlockchain }): Promise<boolean>;
   disconnect(): Promise<boolean>;

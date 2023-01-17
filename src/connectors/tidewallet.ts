@@ -1,7 +1,7 @@
-import Wallets from '../constants/wallets.js';
-import Connector from './connector.js'
+import Wallets from '../constants/wallets';
+import Metamask from './metamask'
 
-class TideWallet extends Connector {
+class TideWallet extends Metamask {
   _type = Wallets.TideWallet;
 }
 

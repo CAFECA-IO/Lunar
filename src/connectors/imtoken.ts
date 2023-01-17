@@ -1,8 +1,5 @@
-import Wallets from '../constants/wallets.js';
-import SmartContract from '../libs/smartcontract.js';
-import Metamask from './metamask.js'
-
-declare let ethereum: any;
+import Wallets from '../constants/wallets';
+import Metamask from './metamask'
 
 class ImToken extends Metamask {
   _type = Wallets.imToken;

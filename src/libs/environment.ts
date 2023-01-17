@@ -8,7 +8,9 @@ class Environment {
     try {
       result = navigator.userAgent;
     }
-    catch(e) {}
+    catch(e) {
+      // Ignore error
+    }
     return result;
   }
   static getWallets() {
@@ -19,7 +21,9 @@ class Environment {
         result.push(Wallets.Metamask);
       }
     }
-    catch(e) {}
+    catch(e) {
+      // Ignore error
+    }
 
     // imToken
     try {
@@ -27,7 +31,9 @@ class Environment {
         result.push(Wallets.imToken);
       }
     }
-    catch(e) {}
+    catch(e) {
+      // Ignore error
+    }
 
     // TideWallet
     try {
@@ -35,13 +41,19 @@ class Environment {
         result.push(Wallets.TideWallet);
       }
     }
-    catch(e) {}
+    catch(e) {
+      // Ignore error
+    }
 
     // Trust
     try {
-
+      if(window.ethereum.isTrust) {
+        result.push(Wallets.Trust);
+      }
     }
-    catch(e) {}
+    catch(e) {
+      // Ignore error
+    }
 
     return result;
   }
