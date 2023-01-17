@@ -1,24 +1,29 @@
 import { EventEmitter } from 'events';
-import Blockchains from './constants/blockchain.js';
-import Wallets from './constants/wallets.js';
-import ConnectorFactory from './connectors/connectorFactory.js';
-import Environment from './libs/environment.js';
+import Blockchains, { Blockchain } from './constants/blockchains';
+import Wallets from './constants/wallets';
+import Connector from './connectors/connector';
+import ConnectorFactory from './connectors/connector_factory';
+import Environment from './libs/environment';
 import { version } from '../package.json';
 
+declare global {
+  interface Window { Lunar: any; }
+}
+
 class Lunar {
+  static version = `v${version}`;
   static Blockchains = Blockchains;
   static Wallets = Wallets;
-  static listBlockchain({ testnet } = {}) {
-    return Blockchains.list({ testnet });
+  static listBlockchain(isTestnet: boolean | undefined) {
+    return Blockchains.list(isTestnet);
   }
-  static findBlockchain({ chainId } = {}) {
+  static findBlockchain(chainId: number) {
     return Blockchains.findByChainId(chainId);
   }
-  static version = `v${version}`;
 
-  _connector;
-  _connectors = [];
-  _eventEmitter;
+  _connector: Connector | undefined = undefined;
+  _connectors: Connector[] = [];
+  _eventEmitter: EventEmitter | undefined = undefined;
 
   constructor() {
     this._eventEmitter = new EventEmitter();
@@ -50,11 +55,11 @@ class Lunar {
       undefined;
   }
 
-  on(event, callback) {
+  on(event: string, callback: Function) {
     return 
   }
 
-  findConnector({ walletType }) {
+  findConnector({ walletType }: { walletType: string }): Connector|undefined {
     return this._connectors
       .filter((v) => !!v)
       .find((v) => {
@@ -62,7 +67,7 @@ class Lunar {
       })
   }
 
-  async connect({ wallet, blockchain } = {}) {
+  async connect({ wallet, blockchain }: { wallet?: string, blockchain?: Blockchain } = {}) {
     if(this.isConnected) {
       return true;
     }
@@ -78,36 +83,60 @@ class Lunar {
     return this.address;
   }
 
-  async switchBlockchain({ blockchain }) {
-    await this._connector.switchBlockchain({ blockchain });
-    return this.address;
+  async switchBlockchain({ blockchain }: { blockchain: Blockchain }) {
+    if(!this._connector) {
+      return false;
+    }
+    const result = await this._connector.switchBlockchain({ blockchain });
+    return result;
   }
 
   async disconnect() {
+    if(!this._connector) {
+      return true;
+    }
     return this._connector.disconnect();
   }
 
-  async getAsset({ contract } = {}) {
+  async getAsset({ contract }: { contract?: string } = {}) {
+    if(!this._connector) {
+      return;
+    }
     return this._connector.getAsset({ contract });
   }
 
-  async getBalance({ contract, address } = {}) {
+  async getBalance({ contract, address }: { contract?: string, address?: string } = {}) {
+    if(!this._connector) {
+      return '0';
+    }
     return this._connector.getBalance({ contract, address });
   }
 
-  async getAllowance({ contract, owner, spender }) {
+  async getAllowance({ contract, owner, spender }: { contract: string, owner: string, spender: string }) {
+    if(!this._connector) {
+      return '0';
+    }
     return this._connector.getAllowance({ contract, owner, spender });
   }
 
-  async getData({ contract, func, params, data }) {
+  async getData({ contract, func, params, data }: { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string> {
+    if(!this._connector) {
+      return '0x';
+    }
     return this._connector.getData({ contract, func, params, data });
   }
 
-  async send({ to, amount, data }) {
+  async send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string> {
+    if(!this._connector) {
+      return '0x';
+    }
     return this._connector.send({ to, amount, data });
   }
 
-  async interfaceOf({ contract, abi }) {
+  async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {
+    if(!this._connector) {
+      return;
+    }
     return this._connector.interfaceOf({ contract, abi });
   }
 }

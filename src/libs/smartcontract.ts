@@ -1,9 +1,9 @@
-import Utils from '../libs/utils.js';
-import Keccak from '../libs/keccak.js'
-import BigNumber from './bignumber.js';
+import { chunkSubstr, toHex } from '../libs/common';
+import Keccak from '@cafeca/keccak';
+import BigNumber from 'bignumber.js';
 
 class SmartContract {
-  static leftPad32(str) {
+  static leftPad32(str: any) {
     let result = '';
     let arr;
     let length = 32 * 2;
@@ -20,35 +20,35 @@ class SmartContract {
     return result;
   }
 
-  static parseString(data) {
+  static parseString(data: string): string {
     let seed = data;
-    if(seed.indexOf('0x') == '0') {
+    if(seed.indexOf('0x') == 0) {
       seed = seed.substr(2);
     }
 
     if(seed.length > 64) {
-      let chunks = Utils.chunkSubstr(seed, 64).slice(2);
+      let chunks = chunkSubstr(seed, 64).slice(2);
       return chunks.map((v) => this.parseString(v)).join('');
     }
 
     let result = '';
     try {
-      result = decodeURIComponent('%' + seed.match(/.{1,2}/g).filter((v) => v != '00').join('%'));
+      result = decodeURIComponent('%' + seed.match(/.{1,2}/g)?.filter((v) => v != '00').join('%'));
     }
     catch(e) {}
     return result;
   }
 
-  static parseHexRLP(data) {
+  static parseHexRLP(data: string) {
     let seed = data;
     let chunks;
     let result;
-    if(seed.indexOf('0x') == '0') {
+    if(seed.indexOf('0x') == 0) {
       seed = seed.substr(2);
     }
   
     if(seed.length > 64) {
-      chunks = Utils.chunkSubstr(seed, 64);
+      chunks = chunkSubstr(seed, 64);
     } else {
       chunks = [seed];
     }
@@ -57,39 +57,36 @@ class SmartContract {
     return result;
   }
 
-  static toSmallestUnitHex({ amount, decimals }) {
+  static toSmallestUnitHex({ amount, decimals } : { amount: number, decimals: number }) {
     const result = new BigNumber(amount)
       .multipliedBy(new BigNumber(10).pow(decimals))
       .toString(16);
     return result;
   }
 
-  static toSmallestUnit({ amount, decimals }) {
+  static toSmallestUnit({ amount, decimals } : { amount: number, decimals: number }) {
     const result = new BigNumber(amount)
       .multipliedBy(new BigNumber(10).pow(decimals))
       .toFixed();
     return result;
   }
 
-  static toContractData({ func, params }) {
+  static toContractData({ func, params } : { func: string, params?: string[] }) {
     if(!func) {
       return '0x'
     }
-    const funcSeed = typeof func == 'string' ?
-      func :
-      func.toString();
-    const dataSeed = Array.isArray(params) ?
-      params.map((v) => {
-        return this.leftPad32(Utils.toHex(v))
-      }) :
-      [this.leftPad32(Utils.toHex(params))];
+    const funcSeed = func;
+    const dataSeed = params?.map((v) => {
+      return this.leftPad32(toHex(v))
+    }) || [];
     const result = '0x'
       .concat(Keccak.keccak256(funcSeed).substr(0, 8))
       .concat(dataSeed.join(''));
     return result;
   }
 
-  static isEthereumAddress(addr) {
+  static isEthereumAddress(addr: any) {
+    if(typeof addr != 'string') { return false; }
     return /^0x[a-fA-F0-9]{40}$/.test(addr);
   }
 }

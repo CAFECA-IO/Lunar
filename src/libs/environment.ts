@@ -1,5 +1,7 @@
 import Wallets from '../constants/wallets';
 
+declare let window: any;
+
 class Environment {
   static getPlatform() {
     let result = 'unknown environment';
