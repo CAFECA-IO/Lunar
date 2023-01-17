@@ -55,7 +55,7 @@ class Lunar {
       undefined;
   }
 
-  on(event: string, callback: Function) {
+  on(event: string, callback: () => void) {
     return 
   }
 
@@ -63,7 +63,7 @@ class Lunar {
     return this._connectors
       .filter((v) => !!v)
       .find((v) => {
-        return v.type == walletType;
+        return v.type === walletType;
       })
   }
 
@@ -144,7 +144,7 @@ class Lunar {
 if(window) {
   window.Lunar = Lunar;
 
-  /** Test Case
+  /* Test Case
   window.lunar = new Lunar();
   window.lunar.connect({ blockchain: Lunar.Blockchains.Ropsten });
   window.lunar.getData({ contract: '0x333cf7C5F2A544cc998d4801e5190BCb9E04003e', func: 'factory()', params: [] });

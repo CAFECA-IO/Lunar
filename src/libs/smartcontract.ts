@@ -5,9 +5,8 @@ import BigNumber from 'bignumber.js';
 class SmartContract {
   static leftPad32(str: any) {
     let result = '';
-    let arr;
-    let length = 32 * 2;
-    if(typeof str == 'string') {
+    const length = 32 * 2;
+    if(typeof str === 'string') {
       result = str.padStart(length, '0');
     } else {
       try {
@@ -22,20 +21,22 @@ class SmartContract {
 
   static parseString(data: string): string {
     let seed = data;
-    if(seed.indexOf('0x') == 0) {
+    if(seed.indexOf('0x') === 0) {
       seed = seed.substr(2);
     }
 
     if(seed.length > 64) {
-      let chunks = chunkSubstr(seed, 64).slice(2);
+      const chunks = chunkSubstr(seed, 64).slice(2);
       return chunks.map((v) => this.parseString(v)).join('');
     }
 
     let result = '';
     try {
-      result = decodeURIComponent('%' + seed.match(/.{1,2}/g)?.filter((v) => v != '00').join('%'));
+      result = decodeURIComponent('%' + seed.match(/.{1,2}/g)?.filter((v) => v !== '00').join('%'));
     }
-    catch(e) {}
+    catch(e) {
+      // Ignore error
+    }
     return result;
   }
 
@@ -43,7 +44,7 @@ class SmartContract {
     let seed = data;
     let chunks;
     let result;
-    if(seed.indexOf('0x') == 0) {
+    if(seed.indexOf('0x') === 0) {
       seed = seed.substr(2);
     }
   
@@ -86,7 +87,7 @@ class SmartContract {
   }
 
   static isEthereumAddress(addr: any) {
-    if(typeof addr != 'string') { return false; }
+    if(typeof addr !== 'string') { return false; }
     return /^0x[a-fA-F0-9]{40}$/.test(addr);
   }
 }

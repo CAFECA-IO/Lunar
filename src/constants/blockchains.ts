@@ -162,22 +162,19 @@ export const Blockchains = class {
   static get keys() {
     return Object.keys(this);
   }
-  static list(isTestnet: boolean | undefined):Blockchain[] {
+  static list(isTestnet?: boolean):Blockchain[] {
     const result = Object.values(Blockchains)
       .filter((v) => {
-        const rs = isTestnet == undefined || (isTestnet == v.isTestnet);
+        const rs = (isTestnet === v.isTestnet) || isTestnet === undefined;
         return rs;
       })
 
     return result;
   }
   static findByChainId(chainId: number = 8017) {
-    let searchKey = toHex(chainId);
-    if(searchKey.indexOf('0x') != 0) searchKey = '0x'.concat(searchKey);
-
     return Object.values(Blockchains)
       .find((v) => {
-        return parseInt(v.chainId) == parseInt(searchKey);
+        return v.chainId === chainId;
       })
   }
 }
