@@ -1,6 +1,23 @@
-class Blockchains {
-  static Avax = {
-    chainId: "0xa86a",
+import { toHex } from "../libs/common";
+
+export interface Blockchain {
+  chainId: number,
+  key: string,
+  chainName: string,
+  nativeCurrency: {
+    name?: string,
+    symbol: string,
+    decimals: number
+  },
+  rpcUrls?: string[],
+  blockExplorerUrls?: string[],
+  iconUrls?: string[],
+  isTestnet: boolean
+};
+
+export const Blockchains = class {
+  static Avax:Blockchain = {
+    chainId: 0xa86a,
     key: "Avax",
     chainName: "Avalanche Network",
     nativeCurrency: {
@@ -11,61 +28,42 @@ class Blockchains {
     blockExplorerUrls: [ "https://cchain.explorer.avax.network/" ],
     isTestnet: false,
   };
-  static BSC = {
-    chainId: "0x38",
+  static BSC:Blockchain = {
+    chainId: 0x38,
     key: "BSC",
     chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
       symbol: "BNB",
       decimals: 18,
     },
-    rpcUrls: [
-      "https://bsc-dataseed.binance.org/",
-      "https://bsc-dataseed1.binance.org/",
-      "https://bsc-dataseed2.binance.org/",
-      "https://bsc-dataseed3.binance.org/",
-      "https://bsc-dataseed4.binance.org/",
-      "https://bsc-dataseed1.defibit.io/",
-      "https://bsc-dataseed2.defibit.io/",
-      "https://bsc-dataseed3.defibit.io/",
-      "https://bsc-dataseed4.defibit.io/",
-      "https://bsc-dataseed1.ninicoin.io/",
-      "https://bsc-dataseed2.ninicoin.io/",
-      "https://bsc-dataseed3.ninicoin.io/",
-      "https://bsc-dataseed4.ninicoin.io/"
-    ],
+    rpcUrls: [ "https://bsc-dataseed.binance.org/" ],
     blockExplorerUrls: [ "https://bscscan.com/" ],
     isTestnet: false,
   };
-  static BSCTestnet = {
-    chainId: "0x61",
+  static BSCTestnet:Blockchain = {
+    chainId: 0x61,
     key: "BSCTestnet",
     chainName: "Binance Smart Chain Testnet",
     nativeCurrency: {
       symbol: "BNB",
       decimals: 18,
     },
-    rpcUrls: [
-      "https://data-seed-prebsc-1-s1.binance.org:8545/",
-      "https://data-seed-prebsc-2-s1.binance.org:8545/",
-      "https://data-seed-prebsc-1-s3.binance.org:8545/",
-      "https://data-seed-prebsc-2-s3.binance.org:8545/"
-    ],
+    rpcUrls: [ "https://data-seed-prebsc-1-s1.binance.org:8545/" ],
     blockExplorerUrls: [ "https://testnet.bscscan.com" ],
     isTestnet: true,
   };
-  static Ethereum = {
-    chainId: "0x1",
+  static Ethereum:Blockchain = {
+    chainId: 0x1,
     key: "Ethereum",
     chainName: "Ethereum",
     nativeCurrency: {
       symbol: "ETH",
       decimals: 18,
     },
-    isTestnet: false,
+    isTestnet: false
   };
-  static AvaxTestnet = {
-    chainId: "0xa869",
+  static AvaxTestnet:Blockchain = {
+    chainId: 0xa869,
     key: "AvaxTestnet",
     chainName: "Avalanche Testnet FUJI",
     nativeCurrency: {
@@ -76,8 +74,8 @@ class Blockchains {
     blockExplorerUrls: [ "https://cchain.explorer.avax-test.network" ],
     isTestnet: true,
   };
-  static Huobi = {
-    chainId: "0x80",
+  static Huobi:Blockchain = {
+    chainId: 0x80,
     key: "Huobi",
     chainName: "HuobiChain",
     nativeCurrency: {
@@ -88,8 +86,8 @@ class Blockchains {
     blockExplorerUrls: [ "https://hecoinfo.com/" ],
     isTestnet: false,
   };
-  static HuobiTestnet = {
-    chainId: "0x100",
+  static HuobiTestnet:Blockchain = {
+    chainId: 0x100,
     key: "HuobiTestnet",
     chainName: "HuobiChain Testnet",
     nativeCurrency: {
@@ -100,8 +98,8 @@ class Blockchains {
     blockExplorerUrls: [ "https://scan-testnet.hecochain.com" ],
     isTestnet: true,
   }
-  static Polygon = {
-    chainId: "0x89",
+  static Polygon:Blockchain = {
+    chainId: 0x89,
     key: "Polygon",
     chainName: "Polygon",
     nativeCurrency: {
@@ -112,8 +110,8 @@ class Blockchains {
     blockExplorerUrls: [ "https://explorer.matic.network/" ],
     isTestnet: false,
   };
-  static PolygonTestnet = {
-    chainId: "0x13881",
+  static PolygonTestnet:Blockchain = {
+    chainId: 0x13881,
     key: "PolygonTestnet",
     chainName: "Polygon Testnet Mumbai",
     nativeCurrency: {
@@ -124,8 +122,8 @@ class Blockchains {
     blockExplorerUrls: [ "https://mumbai-explorer.matic.today/" ],
     isTestnet: true,
   }
-  static EthereumTestnet = {
-    chainId: "0x3",
+  static EthereumTestnet:Blockchain = {
+    chainId: 0x3,
     key: "EthereumTestnet",
     chainName: "ETH testnet Ropsten",
     nativeCurrency: {
@@ -134,22 +132,22 @@ class Blockchains {
     },
     isTestnet: true,
   };
-  static Tidetime = {
-    chainId: "0x1f51",
-    key: "Tidetime",
-    chainName: "Tidetime",
+  static BOLT:Blockchain = {
+    chainId: 0x1f51,
+    key: "BOLT",
+    chainName: "BOLT",
     nativeCurrency: {
-      name: "Tidetime Token",
-      symbol: "TTT",
+      name: "BOLT Liquid Token",
+      symbol: "BLT",
       decimals: 18,
     },
-    rpcUrls: [ "https://rpc.tidebit.network" ],
-    blockExplorerUrls: [ "https://explorer.tidebit.network" ],
-    iconUrls: [ "https://iconape.com/wp-content/png_logo_vector/tidebit.png" ],
+    rpcUrls: [ "https://rpc.boltchain.io" ],
+    blockExplorerUrls: [ "https://explorer.blotchain.io" ],
+    iconUrls: [ "https://blotchain.io/icon.png" ],
     isTestnet: false,
   };
-  static xDAI = {
-    chainId: "0x64",
+  static xDAI:Blockchain = {
+    chainId: 0x64,
     key: "xDAI",
     chainName: "xDai",
     nativeCurrency: {
@@ -164,21 +162,20 @@ class Blockchains {
   static get keys() {
     return Object.keys(this);
   }
-  static list({ testnet }) {
-    const result = this.keys
-      .map((v) => Blockchains[v])
-      .filter((v) => testnet == undefined || !(v.isTestnet ^ testnet))
+  static list(isTestnet: boolean | undefined):Blockchain[] {
+    const result = Object.values(Blockchains)
+      .filter((v) => {
+        const rs = isTestnet == undefined || (isTestnet == v.isTestnet);
+        return rs;
+      })
 
     return result;
   }
-  static findByChainId(chainId = '') {
-    let searchKey = chainId.toString(16);
+  static findByChainId(chainId: number = 8017) {
+    let searchKey = toHex(chainId);
     if(searchKey.indexOf('0x') != 0) searchKey = '0x'.concat(searchKey);
 
-    return this.keys
-      .map((v) => {
-        return this[v];
-      })
+    return Object.values(Blockchains)
       .find((v) => {
         return parseInt(v.chainId) == parseInt(searchKey);
       })

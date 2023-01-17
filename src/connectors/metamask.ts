@@ -1,8 +1,10 @@
+import BigNumber from 'bignumber.js';
 import Wallets from '../constants/wallets.js';
 import Connector from './connector.js';
 import SmartContract from '../libs/smartcontract.js';
-import BigNumber from '../libs/bignumber.js';
-import Blockchains from '../constants/blockchain.js';
+import Blockchains, { Blockchain } from '../constants/blockchains';
+
+declare let ethereum: any;
 
 class Metamask extends Connector {
   _type = Wallets.Metamask;
@@ -18,15 +20,17 @@ class Metamask extends Connector {
     }
   }
 
-  async connect({ blockchain }) {
+  async connect({ blockchain }: { blockchain?: Blockchain } = {}) {
     return this._connect({ blockchain });
   }
 
   async disconnect() {
     this._isConnected = false;
+    return true;
   }
 
-  async send({ from = this.address, to, amount, data }) {
+  async send({ to, amount, data }: { to: string, amount: number, data:string }) {
+    const from = this.address;
     const decimals = await this.getDecimals();
     const value = SmartContract.toSmallestUnitHex({ amount, decimals });
     const transactionParameters = {
@@ -44,7 +48,7 @@ class Metamask extends Connector {
     return txHash;
   }
 
-  async getData({ contract, data, func, params, state = "latest" }) {
+  async getData({ contract, data, func, params, state = "latest" } : { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string> {
     if(data) {
       const requestData = {
         method: 'eth_call',
@@ -55,32 +59,15 @@ class Metamask extends Connector {
       };
       return ethereum.request(requestData);
     } else {
-      let _data = SmartContract.toContractData({ func, params });
+      let _data = func ?
+        SmartContract.toContractData({ func, params }) :
+        '';
       const result = await this.getData({ contract, data: _data });
       return result;
     }
   }
 
-  async getBalance({ contract, address, state = "latest" } = {}) {
-    let address_ = address;
-    if(!SmartContract.isEthereumAddress(address)) {
-      address_ = this.address;
-    }
-    if(typeof(contract) == 'string') {
-      return this.getContractBalance({ contract, address });
-    }
-
-    const requestData = {
-      method: "eth_getBalance",
-      params: [address_, state]
-    }
-    return ethereum.request(requestData).then((rs) => {
-      const balance = (new BigNumber(rs).dividedBy(new BigNumber(10).pow(18))).toString();
-      return balance;
-    })
-  }
-
-  async getContractBalance({ contract, address, state = "latest" } = {}) {
+  async getContractBalance({ contract, address, state = "latest" } : { contract: string, address: string, state?: string }): Promise<string> {
     let address_ = address;
     if(!SmartContract.isEthereumAddress(address)) {
       address_ = this.address;
@@ -95,7 +82,26 @@ class Metamask extends Connector {
     })
   }
 
-  async getDecimals({ contract } = {}) {
+  async getBalance({ contract, address, state = "latest" } = { contract: '', address: '' }) {
+    const address_ = SmartContract.isEthereumAddress(address) ?
+      address :
+      this.address;
+
+    if(typeof(contract) == 'string') {
+      return this.getContractBalance({ contract, address: address_ || '' });
+    }
+
+    const requestData = {
+      method: "eth_getBalance",
+      params: [address_, state]
+    }
+    return ethereum.request(requestData).then((rs: BigNumber.Value) => {
+      const balance = (new BigNumber(rs).dividedBy(new BigNumber(10).pow(18))).toString();
+      return balance;
+    })
+  }
+
+  async getDecimals({ contract } : { contract?: string } = {}) {
     let decimals;
     if(!contract) {
       try {
@@ -112,16 +118,16 @@ class Metamask extends Connector {
       return Promise.resolve(result);
     })
   }
-  async getName({ contract } = {}) {
-    let symbol;
+  async getName({ contract } : { contract?: string } = {}) {
+    let name;
     if(!contract) {
       try {
-        symbol = this.blockchain.nativeCurrency.symbol;
+        name = this.blockchain.nativeCurrency.name || this.blockchain.nativeCurrency.symbol;
       }
       catch(e) {
-        symbol = 'ETH';
+        name = 'ETH';
       }
-      return Promise.resolve(symbol);
+      return Promise.resolve(name);
     }
 
     return this.getData({ contract, func: 'name()' }).then((rs) => {
@@ -129,7 +135,7 @@ class Metamask extends Connector {
       return Promise.resolve(result);
     })
   }
-  async getSymbol({ contract } = {}) {
+  async getSymbol({ contract } : { contract?: string } = {}) {
     let symbol;
     if(!contract) {
       try {
@@ -146,7 +152,7 @@ class Metamask extends Connector {
       return Promise.resolve(result);
     })
   }
-  async getTotalSupply({ contract } = {}) {
+  async getTotalSupply({ contract }  : { contract?: string } = {}) {
     let totalSupply;
     if(!contract) {
       return Promise.resolve('0');
@@ -161,7 +167,7 @@ class Metamask extends Connector {
       return Promise.resolve(totalSupply);
     })
   }
-  async getAsset({ contract, decimals } = {}) {
+  async getAsset({ contract, decimals }: { contract?: string, decimals?: number } = {}) {
     return Promise.all([
       this.getName({ contract }),
       this.getSymbol({ contract }),
@@ -172,13 +178,8 @@ class Metamask extends Connector {
       return Promise.resolve({ name, symbol, decimals, totalSupply });
     })
   }
-  async getAllowance({ contract, owner, spender } = {}) {
-    let allowance;
-    if(!contract) {
-      return Promise.resolve('0');
-    }
-
-    return Promise.all([
+  async getAllowance({ contract, owner, spender }: { contract: string, owner: string, spender: string }) {
+    const result = await Promise.all([
       this.getData({ contract, func: 'allowance(address,address)', params: [owner, spender] }),
       this.getDecimals({ contract })
     ])
@@ -186,20 +187,28 @@ class Metamask extends Connector {
       const allowance = (new BigNumber(_allowance).dividedBy(new BigNumber(10).pow(_decimals))).toString();
       return Promise.resolve(allowance);
     })
+
+    return result;
   }
 
-  async _connect({ blockchain }) {
+  async _connect({ blockchain } : { blockchain?: Blockchain } = {}): Promise<boolean> {
     const requestData = {
       method: 'eth_requestAccounts',
     };
-    return ethereum.request(requestData).then((rs) => {
-      this._blockchain = blockchain;
+    return ethereum.request(requestData).then(async (rs: string[]) => {
       this._address = rs[0];
       this._isConnected = true;
-      return this.switchBlockchain({ blockchain });
+
+      if(blockchain) {
+        this._blockchain = blockchain;
+        await this.switchBlockchain({ blockchain });
+      }
+
+      return true;
     });
   }
-  async switchBlockchain({ blockchain }) {
+
+  async switchBlockchain({ blockchain } : { blockchain: Blockchain }): Promise<boolean> {
     return this._addBlockchain({ blockchain })
     .then(() => {
       const requestData = {
@@ -209,11 +218,11 @@ class Metamask extends Connector {
       return ethereum.request(requestData)
     })
   }
-  async _addBlockchain({ blockchain }) {
+  
+  async _addBlockchain({ blockchain } : { blockchain: Blockchain }): Promise<boolean> {
     const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } = blockchain;
-    const searchChainId = parseInt(chainId);
     const exceptChainId = [1, 3, 4, 5, 42];
-    if(exceptChainId.indexOf(searchChainId) > -1) {
+    if(exceptChainId.indexOf(chainId) > -1) {
       return true;
     }
 

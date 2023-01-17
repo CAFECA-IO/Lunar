@@ -2,13 +2,14 @@ import Wallets from '../constants/wallets.js';
 import TideWallet from './tidewallet.js';
 import ImToken from './imtoken.js';
 import Metamask from './metamask.js';
+import Connector from './connector.js';
 
 class ConnectorFactory {
   static get types() {
     return [ 'TideWallet', 'Metamask', 'imToken' ];
   }
 
-  static create(wallet = '') {
+  static create(wallet = ''): Connector {
     let connector
     switch(wallet) {
       case Wallets.TideWallet:
