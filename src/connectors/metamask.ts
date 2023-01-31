@@ -2,7 +2,9 @@ import BigNumber from 'bignumber.js';
 import Wallets from '../constants/wallets';
 import Connector from './connector';
 import SmartContract from '../libs/smartcontract';
-import Blockchains, { Blockchain } from '../constants/blockchains';
+import IBlockchain from '../interfaces/iblockchain';
+import IEIP712Data, { dummyEIP712Data } from '../interfaces/ieip712data';
+import Blockchains from '../constants/blockchains';
 
 declare let ethereum: any;
 
@@ -11,25 +13,26 @@ class Metamask extends Connector {
 
   constructor() {
     super();
-    try {
-      const chainId = ethereum.chainId;
-      this._blockchain = Blockchains.findByChainId(chainId);
-    }
-    catch(e) {
-      throw e;
-    }
+    const chainId = ethereum?.chainId || "0x1";
+    ethereum?.on('accountsChanged', async (accounts: string[]) => {
+      if(accounts[0]) {
+        this._address = accounts[0];
+      } else {
+        this.reset();
+      }
+    });
   }
 
-  async connect({ blockchain }: { blockchain?: Blockchain } = {}) {
+  async connect({ blockchain }: { blockchain?: IBlockchain } = {}) {
     return this._connect({ blockchain });
   }
 
   async disconnect() {
-    this._isConnected = false;
+    this.reset();
     return true;
   }
 
-  async send({ to, amount, data }: { to: string, amount: number, data:string }) {
+  async send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string> {
     const from = this.address;
     const decimals = await this.getDecimals();
     const value = SmartContract.toSmallestUnitHex({ amount, decimals });
@@ -44,8 +47,30 @@ class Metamask extends Connector {
       method: 'eth_sendTransaction',
       params: [ transactionParameters ],
     };
-    const txHash = await ethereum.request(requestData);
+    const txHash = await ethereum?.request(requestData);
     return txHash;
+  }
+
+  async signTypedData(data: IEIP712Data): Promise<string> {
+    const typedData: IEIP712Data = data;
+    typedData.domain.chainId = this.chainId;
+    typedData.message.from = this.address;
+
+    const from = this.address;
+    const params = [
+      from,
+      (typeof data) === "string" ?
+        data:
+        JSON.stringify(typedData)
+    ];
+    const method = "eth_signTypedData_v4";
+    const requestData = {
+      method,
+      params,
+      from
+    };
+    const result = await ethereum?.request(requestData);
+    return result;
   }
 
   async getData({ contract, data, func, params, state = "latest" } : { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string> {
@@ -57,7 +82,7 @@ class Metamask extends Connector {
           data
         }, state]
       };
-      return ethereum.request(requestData);
+      return ethereum?.request(requestData);
     } else {
       const _data = func ?
         SmartContract.toContractData({ func, params }) :
@@ -95,7 +120,7 @@ class Metamask extends Connector {
       method: "eth_getBalance",
       params: [tmpAddress, state]
     }
-    return ethereum.request(requestData).then((rs: BigNumber.Value) => {
+    return ethereum?.request(requestData).then((rs: BigNumber.Value) => {
       const balance = (new BigNumber(rs).dividedBy(new BigNumber(10).pow(18))).toString();
       return balance;
     })
@@ -191,37 +216,40 @@ class Metamask extends Connector {
     return result;
   }
 
-  async _connect({ blockchain } : { blockchain?: Blockchain } = {}): Promise<boolean> {
+  async _connect({ blockchain } : { blockchain?: IBlockchain } = {}): Promise<boolean> {
     const requestData = {
       method: 'eth_requestAccounts',
     };
-    return ethereum.request(requestData).then(async (rs: string[]) => {
+    return ethereum?.request(requestData).then(async (rs: string[]) => {
       this._address = rs[0];
       this._isConnected = true;
 
       if(blockchain) {
         this._blockchain = blockchain;
         await this.switchBlockchain({ blockchain });
+      } else {
+        const currentChainId = ethereum.chainId;
+        const currentBlockchain = Blockchains.findByChainId(currentChainId);
+        this._blockchain = currentBlockchain;
       }
 
       return true;
     });
   }
 
-  async switchBlockchain({ blockchain } : { blockchain: Blockchain }): Promise<boolean> {
-    return this._addBlockchain({ blockchain })
-    .then(() => {
-      const requestData = {
-        method: 'wallet_switchEthereumChain',
-        params:[ { chainId: blockchain.chainId } ]
-      };
-      return ethereum.request(requestData)
-    })
+  async switchBlockchain({ blockchain } : { blockchain: IBlockchain }): Promise<boolean> {
+    await this._addBlockchain({ blockchain })
+    const requestData = {
+      method: 'wallet_switchEthereumChain',
+      params:[ { chainId: blockchain.chainId } ]
+    };
+    const result = ethereum?.request(requestData);
+    return result;
   }
   
-  async _addBlockchain({ blockchain } : { blockchain: Blockchain }): Promise<boolean> {
+  async _addBlockchain({ blockchain } : { blockchain: IBlockchain }): Promise<boolean> {
     const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } = blockchain;
-    const exceptChainId = [1, 3, 4, 5, 42];
+    const exceptChainId = ["0x1", "0x3", "0x4", "0x5", "0x2a"];
     if(exceptChainId.indexOf(chainId) > -1) {
       return true;
     }
@@ -230,7 +258,7 @@ class Metamask extends Connector {
       method: 'wallet_addEthereumChain',
       params: [ { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } ],
     };
-    return ethereum.request(requestData);
+    return ethereum?.request(requestData);
   }
 }
 

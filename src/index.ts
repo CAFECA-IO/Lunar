@@ -1,32 +1,32 @@
-import { EventEmitter } from 'events';
-import Blockchains, { Blockchain } from './constants/blockchains';
+import Blockchains from './constants/blockchains';
 import Wallets from './constants/wallets';
 import Connector from './connectors/connector';
 import ConnectorFactory from './connectors/connector_factory';
 import Environment from './libs/environment';
-import { version } from '../package.json';
+import IBlockchain from './interfaces/iblockchain';
+import IEIP712Data from './interfaces/ieip712data';
+// import { version } from '../package.json';
 
 declare global {
   interface Window { Lunar: any; }
 }
 
-class Lunar {
-  static version = `v${version}`;
+export class Lunar {
+  // static version = `v${version}`;
+  static version = `v0.4.1`;
   static Blockchains = Blockchains;
   static Wallets = Wallets;
   static listBlockchain(isTestnet: boolean | undefined) {
     return Blockchains.list(isTestnet);
   }
-  static findBlockchain(chainId: number) {
+  static findBlockchain(chainId: string) {
     return Blockchains.findByChainId(chainId);
   }
 
   _connector: Connector | undefined = undefined;
   _connectors: Connector[] = [];
-  _eventEmitter: EventEmitter | undefined = undefined;
 
   constructor() {
-    this._eventEmitter = new EventEmitter();
     this._connector = ConnectorFactory.create();
   }
 
@@ -67,7 +67,7 @@ class Lunar {
       })
   }
 
-  async connect({ wallet, blockchain }: { wallet?: string, blockchain?: Blockchain } = {}) {
+  async connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain } = {}) {
     if(this.isConnected) {
       return true;
     }
@@ -83,7 +83,7 @@ class Lunar {
     return this.address;
   }
 
-  async switchBlockchain({ blockchain }: { blockchain: Blockchain }) {
+  async switchBlockchain({ blockchain }: { blockchain: IBlockchain }) {
     if(!this._connector) {
       return false;
     }
@@ -133,6 +133,14 @@ class Lunar {
     return this._connector.send({ to, amount, data });
   }
 
+  async signTypedData(params: any): Promise<string> {
+    let result = '0x'
+    if(this._connector) {
+      result = await this._connector.signTypedData(params);
+    }
+    return result;
+  }
+
   async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {
     if(!this._connector) {
       return;
@@ -141,18 +149,14 @@ class Lunar {
   }
 }
 
-if(window) {
-  window.Lunar = Lunar;
+const g: any = typeof globalThis === "object"
+    ? globalThis
+    : typeof window === "object"
+        ? window
+        : typeof global === "object"
+            ? global
+            : null; // Causes an error on the next line
+g.Lunar = Lunar;
 
-  /* Test Case
-  window.lunar = new Lunar();
-  window.lunar.connect({ blockchain: Lunar.Blockchains.Ropsten });
-  window.lunar.getData({ contract: '0x333cf7C5F2A544cc998d4801e5190BCb9E04003e', func: 'factory()', params: [] });
-  window.lunar.getBalance();
-  window.lunar.getBalance({ address: '0x048Adee1B0E93b30f9F7b71f18b963cA9bA5dE3b' });
-  window.lunar.getBalance({ contract: '0x9c8fa1ee532f8afe9f2e27f06fd836f3c9572f71', address: '0xdc926e34e73292cd7c48c6fd7375af7d93435d36' });
-  window.lunar.send({ to: '0xd8a149a2E906613CB1e5c0FFf675AF2636Cf77bF', amount: '0.001' });
-   */
-}
-
+module.exports = Lunar;
 export default Lunar;

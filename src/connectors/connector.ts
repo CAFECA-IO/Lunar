@@ -1,11 +1,12 @@
-import { Blockchains, Blockchain } from "../constants/blockchains";
+import Blockchains from "../constants/blockchains";
 import Wallets from "../constants/wallets";
 import IAsset from "../interfaces/iasset";
+import IBlockchain from "../interfaces/iblockchain";
 
 class Connector {
   _isConnected: boolean = false;
   _address: string = '0x';
-  _blockchain: Blockchain = Blockchains.BOLT;
+  _blockchain: IBlockchain = Blockchains.BOLT;
   _type: string = Wallets.TideWallet;
   _assets: string[] = [];
 
@@ -33,15 +34,21 @@ class Connector {
     return true;
   }
 
+  async reset() {
+    this._address = '0x';
+    this._isConnected = false;
+    return true;
+  }
+
   on(event:Event, callback:() => void) {
     return;
   }
 
-  async connect({ blockchain }: { blockchain?: Blockchain } = {}): Promise<boolean> {
+  async connect({ blockchain }: { blockchain?: IBlockchain } = {}): Promise<boolean> {
     return true;
   }
 
-  async switchBlockchain({ blockchain }: { blockchain: Blockchain }): Promise<boolean> {
+  async switchBlockchain({ blockchain }: { blockchain: IBlockchain }): Promise<boolean> {
     return true;
   }
 
@@ -50,6 +57,10 @@ class Connector {
   }
 
   async send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string> {
+    return "0x";
+  }
+
+  async signTypedData(params: any): Promise<string> {
     return "0x";
   }
 
