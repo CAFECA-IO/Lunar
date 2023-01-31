@@ -1,23 +1,9 @@
 import { toHex } from "../libs/common";
-
-export interface Blockchain {
-  chainId: number,
-  key: string,
-  chainName: string,
-  nativeCurrency: {
-    name?: string,
-    symbol: string,
-    decimals: number
-  },
-  rpcUrls?: string[],
-  blockExplorerUrls?: string[],
-  iconUrls?: string[],
-  isTestnet: boolean
-};
+import IBlockchain from "../interfaces/iblockchain";
 
 export const Blockchains = class {
-  static Avax:Blockchain = {
-    chainId: 0xa86a,
+  static Avax: IBlockchain = {
+    chainId: "0xa86a",
     key: "Avax",
     chainName: "Avalanche Network",
     nativeCurrency: {
@@ -28,8 +14,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://cchain.explorer.avax.network/" ],
     isTestnet: false,
   };
-  static BSC:Blockchain = {
-    chainId: 0x38,
+  static BSC: IBlockchain = {
+    chainId: "0x38",
     key: "BSC",
     chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
@@ -40,8 +26,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://bscscan.com/" ],
     isTestnet: false,
   };
-  static BSCTestnet:Blockchain = {
-    chainId: 0x61,
+  static BSCTestnet: IBlockchain = {
+    chainId: "0x61",
     key: "BSCTestnet",
     chainName: "Binance Smart Chain Testnet",
     nativeCurrency: {
@@ -52,8 +38,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://testnet.bscscan.com" ],
     isTestnet: true,
   };
-  static Ethereum:Blockchain = {
-    chainId: 0x1,
+  static Ethereum: IBlockchain = {
+    chainId: "0x1",
     key: "Ethereum",
     chainName: "Ethereum",
     nativeCurrency: {
@@ -62,8 +48,8 @@ export const Blockchains = class {
     },
     isTestnet: false
   };
-  static AvaxTestnet:Blockchain = {
-    chainId: 0xa869,
+  static AvaxTestnet: IBlockchain = {
+    chainId: "0xa869",
     key: "AvaxTestnet",
     chainName: "Avalanche Testnet FUJI",
     nativeCurrency: {
@@ -74,8 +60,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://cchain.explorer.avax-test.network" ],
     isTestnet: true,
   };
-  static Huobi:Blockchain = {
-    chainId: 0x80,
+  static Huobi: IBlockchain = {
+    chainId: "0x80",
     key: "Huobi",
     chainName: "HuobiChain",
     nativeCurrency: {
@@ -86,8 +72,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://hecoinfo.com/" ],
     isTestnet: false,
   };
-  static HuobiTestnet:Blockchain = {
-    chainId: 0x100,
+  static HuobiTestnet: IBlockchain = {
+    chainId: "0x100",
     key: "HuobiTestnet",
     chainName: "HuobiChain Testnet",
     nativeCurrency: {
@@ -98,8 +84,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://scan-testnet.hecochain.com" ],
     isTestnet: true,
   }
-  static Polygon:Blockchain = {
-    chainId: 0x89,
+  static Polygon: IBlockchain = {
+    chainId: "0x89",
     key: "Polygon",
     chainName: "Polygon",
     nativeCurrency: {
@@ -110,8 +96,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://explorer.matic.network/" ],
     isTestnet: false,
   };
-  static PolygonTestnet:Blockchain = {
-    chainId: 0x13881,
+  static PolygonTestnet: IBlockchain = {
+    chainId: "0x13881",
     key: "PolygonTestnet",
     chainName: "Polygon Testnet Mumbai",
     nativeCurrency: {
@@ -122,8 +108,8 @@ export const Blockchains = class {
     blockExplorerUrls: [ "https://mumbai-explorer.matic.today/" ],
     isTestnet: true,
   }
-  static EthereumTestnet:Blockchain = {
-    chainId: 0x3,
+  static EthereumTestnet: IBlockchain = {
+    chainId: "0x3",
     key: "EthereumTestnet",
     chainName: "ETH testnet Ropsten",
     nativeCurrency: {
@@ -132,8 +118,8 @@ export const Blockchains = class {
     },
     isTestnet: true,
   };
-  static BOLT:Blockchain = {
-    chainId: 0x1f51,
+  static BOLT: IBlockchain = {
+    chainId: "0x1f51",
     key: "BOLT",
     chainName: "BOLT",
     nativeCurrency: {
@@ -146,8 +132,8 @@ export const Blockchains = class {
     iconUrls: [ "https://blotchain.io/icon.png" ],
     isTestnet: false,
   };
-  static xDAI:Blockchain = {
-    chainId: 0x64,
+  static xDAI: IBlockchain = {
+    chainId: "0x64",
     key: "xDAI",
     chainName: "xDai",
     nativeCurrency: {
@@ -162,7 +148,7 @@ export const Blockchains = class {
   static get keys() {
     return Object.keys(this);
   }
-  static list(isTestnet?: boolean):Blockchain[] {
+  static list(isTestnet?: boolean): IBlockchain[] {
     const result = Object.values(Blockchains)
       .filter((v) => {
         const rs = (isTestnet === v.isTestnet) || isTestnet === undefined;
@@ -171,7 +157,7 @@ export const Blockchains = class {
 
     return result;
   }
-  static findByChainId(chainId: number = 8017) {
+  static findByChainId(chainId: string = "0x1") {
     return Object.values(Blockchains)
       .find((v) => {
         return v.chainId === chainId;

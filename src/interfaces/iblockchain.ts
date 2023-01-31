@@ -1,5 +1,5 @@
 interface IBlockchain {
-  chainId: number,
+  chainId: string,
   key: string,
   chainName: string,
   nativeCurrency: {
