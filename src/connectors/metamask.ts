@@ -220,8 +220,12 @@ class Metamask extends Connector {
     const requestData = {
       method: 'eth_requestAccounts',
     };
-    return ethereum?.request(requestData).then(async (rs: string[]) => {
-      this._address = rs[0];
+
+    const addresses = await ethereum?.request(requestData);
+    let result = false;
+    if(addresses) {
+      result = true;
+      this._address = addresses[0];
       this._isConnected = true;
 
       if(blockchain) {
@@ -232,9 +236,8 @@ class Metamask extends Connector {
         const currentBlockchain = Blockchains.findByChainId(currentChainId);
         this._blockchain = currentBlockchain;
       }
-
-      return true;
-    });
+    }
+    return result;
   }
 
   async switchBlockchain({ blockchain } : { blockchain: IBlockchain }): Promise<boolean> {
