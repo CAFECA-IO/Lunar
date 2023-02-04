@@ -17,7 +17,7 @@ declare class Lunar {
 
   constructor();
   on(event: string, callback: Function): void;
-  findConnector({ walletType }: { walletType: string }): IConnector|undefined;
+  findConnector({ walletType }: { walletType: string }): IConnector | undefined;
   connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain }): Promise<boolean>;
   switchBlockchain({ blockchain }: { blockchain: IBlockchain }): Promise<boolean>;
   disconnect(): Promise<boolean>;
