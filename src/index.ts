@@ -13,7 +13,7 @@ declare global {
 
 export class Lunar {
   // static version = `v${version}`;
-  static version = `v0.4.1`;
+  static version = `v0.4.3`;
   static Blockchains = Blockchains;
   static Wallets = Wallets;
   static listBlockchain(isTestnet: boolean | undefined) {
@@ -67,10 +67,12 @@ export class Lunar {
       })
   }
 
-  async connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain } = {}) {
+  async connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain } = {}): Promise<boolean> {
     if(this.isConnected) {
       return true;
     }
+
+    let result = false;
     const defaultWallet = this.env.wallets[0];
     const walletType = (wallet || defaultWallet);
     this._connector = this.findConnector({ walletType });
@@ -78,9 +80,9 @@ export class Lunar {
       const newConnector = ConnectorFactory.create(walletType);
       this._connectors.push(newConnector);
       this._connector = newConnector;
-      await this._connector.connect({ blockchain });
+      result = await this._connector.connect({ blockchain });
     }
-    return this.address;
+    return result;
   }
 
   async switchBlockchain({ blockchain }: { blockchain: IBlockchain }) {
