@@ -6,7 +6,14 @@ import IBlockchain from '../interfaces/iblockchain';
 import IEIP712Data, { dummyEIP712Data } from '../interfaces/ieip712data';
 import Blockchains from '../constants/blockchains';
 
-declare let ethereum: any;
+const g: any = typeof globalThis === "object"
+    ? globalThis
+    : typeof window === "object"
+        ? window
+        : typeof global === "object"
+            ? global
+            : null; // Causes an error on the next line
+const { ethereum } = g;
 
 class WalletConnect extends Connector {
 }

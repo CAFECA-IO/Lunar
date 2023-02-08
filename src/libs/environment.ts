@@ -1,6 +1,13 @@
 import Wallets from '../constants/wallets';
 
-declare let window: any;
+const g: any = typeof globalThis === "object"
+    ? globalThis
+    : typeof window === "object"
+        ? window
+        : typeof global === "object"
+            ? global
+            : null; // Causes an error on the next line
+const { ethereum } = g;
 
 class Environment {
   static getPlatform() {
@@ -17,7 +24,7 @@ class Environment {
     const result = [];
     // metamask
     try {
-      if(window.ethereum.isMetaMask) {
+      if(ethereum?.isMetaMask) {
         result.push(Wallets.Metamask);
       }
     }
@@ -27,7 +34,7 @@ class Environment {
 
     // imToken
     try {
-      if(window.ethereum.isImToken) {
+      if(ethereum?.isImToken) {
         result.push(Wallets.imToken);
       }
     }
@@ -37,7 +44,7 @@ class Environment {
 
     // TideWallet
     try {
-      if(window.ethereum.isTideWallet) {
+      if(ethereum?.isTideWallet) {
         result.push(Wallets.TideWallet);
       }
     }
@@ -47,7 +54,7 @@ class Environment {
 
     // Trust
     try {
-      if(window.ethereum.isTrust) {
+      if(ethereum?.isTrust) {
         result.push(Wallets.Trust);
       }
     }
