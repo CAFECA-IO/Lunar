@@ -39,7 +39,7 @@ const blockchain = lunar.blockchain;
 
 // regist notification
 lunar.on((event, data) => {
-  // ready, connected, disconnected
+  // connected | address, disconnected | boolean, accountChanged | address
   console.log(event);
   console.log(data);
 });

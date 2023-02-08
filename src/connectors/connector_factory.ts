@@ -5,8 +5,14 @@ import Metamask from './metamask';
 import Connector from './connector';
 import WalletConnect from './walletconnect';
 
-declare let window: any;
-const { ethereum } = window;
+const g: any = typeof globalThis === "object"
+    ? globalThis
+    : typeof window === "object"
+        ? window
+        : typeof global === "object"
+            ? global
+            : null; // Causes an error on the next line
+const { ethereum } = g;
 
 class ConnectorFactory {
   static get types() {
