@@ -17,10 +17,6 @@ declare global {
 // disconnected | boolean
 // accountChanged | address
 
-class lunarEventEmitter extends EventEmitter {
-  id: string = '0';
-}
-
 export class Lunar {
   // static version = `v${version}`;
   static version = `v0.4.4`;
@@ -35,11 +31,10 @@ export class Lunar {
 
   _connector: Connector|undefined;
   _connectors: Connector[] = [];
-  _emitter: lunarEventEmitter = new lunarEventEmitter();
+  _emitter: EventEmitter = new EventEmitter();
 
 
   constructor() {
-    this.emitter.id = 'xxx';
     this.connector = ConnectorFactory.create();
   }
 
@@ -75,15 +70,14 @@ export class Lunar {
   get connector() {
     return this._connector;
   }
-
-  get connectors() {
-    return this._connectors;
-  }
-
   set connector(connector: Connector|undefined) {
     if(connector === undefined) return;
     this._connector = connector;
     this._connector.emitter = this.emitter;
+  }
+
+  get connectors() {
+    return this._connectors;
   }
 
   on(event: string, callback: () => void) {

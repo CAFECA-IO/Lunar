@@ -15,12 +15,28 @@ class Connector {
   get isConnected() {
     return this._isConnected;
   }
+  set isConnected(value: boolean) {
+    this._isConnected = value;
+    if(value) {
+      this.onConnected();
+    }
+    else {
+      this.onDisconnected();
+    }
+  }
+
   get blockchain() {
     return this._blockchain;
   }
+
   get address() {
     return this._address;
   }
+  set address(value: string) {
+    this._address = value;
+    this.onAccountsChanged();
+  }
+
   get type() {
     return this._type;
   }
@@ -29,21 +45,6 @@ class Connector {
   }
   get emitter() {
     return this._emitter;
-  }
-  set isConnected(isConnected: boolean) {
-    console.log('set isConnected')
-    this._isConnected = isConnected;
-    if(isConnected) {
-      this.onConnected();
-    }
-    else {
-      this.onDisconnected();
-    }
-  }
-  set address(address: string) {
-    console.log('set address')
-    this._address = address;
-    this.onAccountsChanged();
   }
   set emitter(emitter: EventEmitter) {
     this._emitter = emitter;
