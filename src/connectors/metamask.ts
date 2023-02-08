@@ -6,7 +6,14 @@ import IBlockchain from '../interfaces/iblockchain';
 import IEIP712Data, { dummyEIP712Data } from '../interfaces/ieip712data';
 import Blockchains from '../constants/blockchains';
 
-declare let ethereum: any;
+const g: any = typeof globalThis === "object"
+    ? globalThis
+    : typeof window === "object"
+        ? window
+        : typeof global === "object"
+            ? global
+            : null; // Causes an error on the next line
+const { ethereum } = g;
 
 class Metamask extends Connector {
   _type = Wallets.Metamask;
@@ -14,9 +21,10 @@ class Metamask extends Connector {
   constructor() {
     super();
     const chainId = ethereum?.chainId || "0x1";
-    ethereum?.on('accountsChanged', async (accounts: string[]) => {
-      if(accounts[0]) {
-        this._address = accounts[0];
+    ethereum?.on('accountsChanged', async (addresses: string[]) => {
+      const address = addresses[0]
+      if(address) {
+        this.address = address;
       } else {
         this.reset();
       }
@@ -223,10 +231,11 @@ class Metamask extends Connector {
 
     const addresses = await ethereum?.request(requestData);
     let result = false;
-    if(addresses) {
+    const address = addresses[0];
+    if(address) {
       result = true;
-      this._address = addresses[0];
-      this._isConnected = true;
+      this.address = address;
+      this.isConnected = true;
 
       if(blockchain) {
         this._blockchain = blockchain;
