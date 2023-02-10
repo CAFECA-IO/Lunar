@@ -234,8 +234,8 @@ class Metamask extends Connector {
     const address = addresses[0];
     if(address) {
       result = true;
-      this.address = address;
       this.isConnected = true;
+      this.address = address;
 
       if(blockchain) {
         this._blockchain = blockchain;
