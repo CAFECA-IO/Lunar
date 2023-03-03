@@ -18,74 +18,83 @@ declare global {
 // accountChanged | address
 
 export class Lunar {
+  private static instance: Lunar;
   // static version = `v${version}`;
-  static version = `v0.4.4`;
-  static Blockchains = Blockchains;
-  static Wallets = Wallets;
-  static listBlockchain(isTestnet: boolean | undefined) {
+  public static version = `v0.5.0`;
+  public static Blockchains = Blockchains;
+  public static Wallets = Wallets;
+
+  public static getInstance(): Lunar {
+    if (!Lunar.instance) {
+      Lunar.instance = new Lunar();
+    }
+
+    return Lunar.instance;
+  }
+  public static listBlockchain(isTestnet: boolean | undefined) {
     return Blockchains.list(isTestnet);
   }
-  static findBlockchain(chainId: string) {
+  public static findBlockchain(chainId: string) {
     return Blockchains.findByChainId(chainId);
   }
 
-  _connector: Connector|undefined;
-  _connectors: Connector[] = [];
-  _emitter: EventEmitter = new EventEmitter();
+  private _connector: Connector|undefined;
+  private _connectors: Connector[] = [];
+  private _emitter: EventEmitter = new EventEmitter();
 
 
   constructor() {
     this.connector = ConnectorFactory.create();
   }
 
-  get env() {
+  public get env() {
     return {
       platform: Environment.getPlatform(),
       wallets: Environment.getWallets()
     }
   }
 
-  get isConnected() {
+  public get isConnected() {
     return this.connector ?
       this.connector.isConnected :
       false;
   }
 
-  get address() {
+  public get address() {
     return this.connector ?
       this.connector.address:
       false;
   }
 
-  get blockchain() {
+  public get blockchain() {
     return this.connector ?
       this.connector.blockchain:
       undefined;
   }
 
-  get emitter() {
+  public get emitter() {
     return this._emitter;
   }
 
-  get connector() {
+  public get connector() {
     return this._connector;
   }
-  set connector(connector: Connector|undefined) {
+  public set connector(connector: Connector|undefined) {
     if(connector === undefined) return;
     this._connector = connector;
     this._connector.emitter = this.emitter;
   }
 
-  get connectors() {
+  public get connectors() {
     return this._connectors;
   }
 
-  on(event: string, callback: () => void) {
+  public on(event: string, callback: () => void) {
     this.emitter.on(event, callback);
     return 
   }
 
-  findConnector({ walletType }: { walletType: string }): Connector|undefined {
+  public findConnector({ walletType }: { walletType: string }): Connector|undefined {
     return this.connectors
       .filter((v) => !!v)
       .find((v) => {
@@ -93,7 +102,7 @@ export class Lunar {
       })
   }
 
-  async connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain } = {}): Promise<boolean> {
+  public async connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain } = {}): Promise<boolean> {
     if(this.isConnected) {
       return true;
     }
@@ -111,7 +120,7 @@ export class Lunar {
     return result;
   }
 
-  async switchBlockchain({ blockchain }: { blockchain: IBlockchain }) {
+  public async switchBlockchain({ blockchain }: { blockchain: IBlockchain }) {
     if(!this.connector) {
       return false;
     }
@@ -119,49 +128,49 @@ export class Lunar {
     return result;
   }
 
-  async disconnect() {
+  public async disconnect() {
     if(!this.connector) {
       return true;
     }
     return this.connector.disconnect();
   }
 
-  async getAsset({ contract }: { contract?: string } = {}) {
+  public async getAsset({ contract }: { contract?: string } = {}) {
     if(!this.connector) {
       return;
     }
     return this.connector.getAsset({ contract });
   }
 
-  async getBalance({ contract, address }: { contract?: string, address?: string } = {}) {
+  public async getBalance({ contract, address }: { contract?: string, address?: string } = {}) {
     if(!this.connector) {
       return '0';
     }
     return this.connector.getBalance({ contract, address });
   }
 
-  async getAllowance({ contract, owner, spender }: { contract: string, owner: string, spender: string }) {
+  public async getAllowance({ contract, owner, spender }: { contract: string, owner: string, spender: string }) {
     if(!this.connector) {
       return '0';
     }
     return this.connector.getAllowance({ contract, owner, spender });
   }
 
-  async getData({ contract, func, params, data }: { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string> {
+  public async getData({ contract, func, params, data }: { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string> {
     if(!this.connector) {
       return '0x';
     }
     return this.connector.getData({ contract, func, params, data });
   }
 
-  async send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string> {
+  public async send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string> {
     if(!this.connector) {
       return '0x';
     }
     return this.connector.send({ to, amount, data });
   }
 
-  async signTypedData(params: any): Promise<string> {
+  public async signTypedData(params: any): Promise<string> {
     let result = '0x'
     if(this.connector) {
       result = await this.connector.signTypedData(params);
@@ -169,7 +178,7 @@ export class Lunar {
     return result;
   }
 
-  async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {
+  public async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {
     if(!this.connector) {
       return;
     }

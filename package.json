@@ -1,6 +1,6 @@
 {
   "name": "@cafeca/lunar",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Blockchain Connect Module",
   "main": "dist/index.js",
   "files": [
