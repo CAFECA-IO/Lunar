@@ -34,6 +34,9 @@ const blockchains = Lunar.listBlockchain({ testnet: true });
 // initial
 const lunar = new Lunar();
 
+// or Singleton
+// const lunar = Lunar.getInstance();
+
 // get current blockchain
 const blockchain = lunar.blockchain;
 
