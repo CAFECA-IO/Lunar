@@ -5,6 +5,7 @@ import ConnectorFactory from './connectors/connector_factory';
 import Environment from './libs/environment';
 import IBlockchain from './interfaces/iblockchain';
 import IEIP712Data from './interfaces/ieip712data';
+import IJSON from './interfaces/ijson';
 import { EventEmitter } from 'events';
 // import { version } from '../package.json';
 
@@ -20,7 +21,7 @@ declare global {
 export class Lunar {
   private static instance: Lunar;
   // static version = `v${version}`;
-  public static version = `v0.5.0`;
+  public static version = `v0.5.1`;
   public static Blockchains = Blockchains;
   public static Wallets = Wallets;
 
@@ -37,6 +38,15 @@ export class Lunar {
   public static findBlockchain(chainId: string) {
     return Blockchains.findByChainId(chainId);
   }
+  public static recovery(message: string, signature: string): string {
+    // ++ ToDo: finish in v0.6.0
+    return '0x';
+  }
+  public static recoveryTypedData(params: IJSON, signature: string): string {
+    // ++ ToDo: finish in v0.6.0
+    return '0x';
+  }
+
 
   private _connector: Connector|undefined;
   private _connectors: Connector[] = [];
@@ -176,6 +186,15 @@ export class Lunar {
       result = await this.connector.signTypedData(params);
     }
     return result;
+  }
+
+  public verify(message: string, signature: string): boolean {
+    // ++ ToDo: finish in v0.6.0
+    return Math.random() > 0.3;
+  }
+  public verifyTypedData(params: IJSON, signature: string): boolean {
+    // ++ ToDo: finish in v0.6.0
+    return Math.random() > 0.3;
   }
 
   public async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {

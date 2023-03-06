@@ -1,5 +1,5 @@
 import { chunkSubstr, toHex } from '../libs/common';
-import Keccak from '@cafeca/keccak';
+import { keccak256 } from '@cafeca/keccak';
 import BigNumber from 'bignumber.js';
 
 class SmartContract {
@@ -81,7 +81,7 @@ class SmartContract {
       return this.leftPad32(toHex(v))
     }) || [];
     const result = '0x'
-      .concat(Keccak.keccak256(funcSeed).substr(0, 8))
+      .concat(keccak256(funcSeed).substr(0, 8))
       .concat(dataSeed.join(''));
     return result;
   }
