@@ -2,6 +2,7 @@ import IAsset from "./src/interfaces/iasset";
 import IBlockchain from "./src/interfaces/iblockchain";
 import IConnector from "./src/interfaces/iconnector";
 import IEnv from "./src/interfaces/ienv";
+import IJSON from "./src/interfaces/ijson";
 
 declare class Lunar {
   private static instance: Lunar;
@@ -11,6 +12,8 @@ declare class Lunar {
   public static getInstance(): Lunar
   public static listBlockchain(isTestnet: boolean | undefined): IBlockchain[];
   public static findBlockchain(chainId: number): IBlockchain;
+  public static recovery(message: string, signature: string): string;
+  public static recoveryTypedData(params: IJSON, signature: string): string;
 
   public env: IEnv;
   public isConnected: boolean;
@@ -28,7 +31,9 @@ declare class Lunar {
   public getAllowance({ contract, owner, spender }: { contract: string, owner: string, spender: string }): Promise<string>;
   public getData({ contract, func, params, data }: { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string>;
   public send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string>;
-  public signTypedData(params: any): Promise<string>;
+  public signTypedData(params: IJSON): Promise<string>;
+  public verify(message: string, signature: string): boolean;
+  public verifyTypedData(params: IJSON, signature: string): boolean;
   public interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any>;
 }
 export default Lunar;
