@@ -190,11 +190,11 @@ export class Lunar {
 
   public verify(message: string, signature: string): boolean {
     // ++ ToDo: finish in v0.6.0
-    return Math.random() > 0.3;
+    return true;
   }
   public verifyTypedData(params: IJSON, signature: string): boolean {
     // ++ ToDo: finish in v0.6.0
-    return Math.random() > 0.3;
+    return true;
   }
 
   public async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {
