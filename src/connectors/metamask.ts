@@ -16,11 +16,21 @@ const g: any = typeof globalThis === "object"
 const { ethereum } = g;
 
 class Metamask extends Connector {
+  private static instance: Metamask;
   _type = Wallets.Metamask;
+
+  public static getInstance(): Metamask {
+    if (!Metamask.instance) {
+      Metamask.instance = new Metamask();
+    }
+
+    return Metamask.instance;
+  }
 
   constructor() {
     super();
     const chainId = ethereum?.chainId || "0x1";
+    this.recoverConnection();
     ethereum?.on('accountsChanged', async (addresses: string[]) => {
       const address = addresses[0]
       if(address) {
@@ -29,6 +39,13 @@ class Metamask extends Connector {
         this.reset();
       }
     });
+  }
+
+  private recoverConnection(): void {
+    if(ethereum?.isConnected() && ethereum?.selectedAddress) {
+      this.isConnected = true;
+      this.address = ethereum.selectedAddress;
+    }
   }
 
   async connect({ blockchain }: { blockchain?: IBlockchain } = {}) {
@@ -225,6 +242,10 @@ class Metamask extends Connector {
   }
 
   async _connect({ blockchain } : { blockchain?: IBlockchain } = {}): Promise<boolean> {
+    if(this.isConnected && this.address) {
+      return true;
+    }
+
     const requestData = {
       method: 'eth_requestAccounts',
     };
