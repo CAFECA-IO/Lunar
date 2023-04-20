@@ -5,8 +5,10 @@ import ConnectorFactory from './connectors/connector_factory';
 import Environment from './libs/environment';
 import IBlockchain from './interfaces/iblockchain';
 import IEIP712Data from './interfaces/ieip712data';
+import { recoverAddress } from './libs/common';
 import IJSON from './interfaces/ijson';
 import { EventEmitter } from 'events';
+import { keccak256 } from '@cafeca/keccak';
 // import { version } from '../package.json';
 
 declare global {
@@ -21,9 +23,10 @@ declare global {
 export class Lunar {
   private static instance: Lunar;
   // static version = `v${version}`;
-  public static version = `v0.5.1`;
+  public static version = `v0.5.3`;
   public static Blockchains = Blockchains;
   public static Wallets = Wallets;
+  public static keccak256 = keccak256;
 
   public static getInstance(): Lunar {
     if (!Lunar.instance) {
@@ -55,6 +58,10 @@ export class Lunar {
 
   constructor() {
     this.connector = ConnectorFactory.create();
+  }
+
+  public resetEvents() {
+    this._emitter.removeAllListeners();
   }
 
   public get env() {
@@ -181,9 +188,11 @@ export class Lunar {
   }
 
   public async signTypedData(params: any): Promise<string> {
-    let result = '0x'
-    if(this.connector) {
-      result = await this.connector.signTypedData(params);
+    let result = '0x';
+    try {
+      result = await this.connector?.signTypedData(params) || '0x';
+    } catch (error) {
+      // ++ ToDo: finish in v0.6.0
     }
     return result;
   }
@@ -194,7 +203,21 @@ export class Lunar {
   }
   public verifyTypedData(params: IJSON, signature: string): boolean {
     // ++ ToDo: finish in v0.6.0
-    return true;
+    // verify metamask typed data v4
+
+    const signer = this.address;
+    const json = JSON.parse(JSON.stringify(params));
+    const address = json?.message?.signer;
+    const result = address?
+      signer === address.toLowerCase() :
+      true;
+    /*
+    const hash = keccak256(data);
+    const chainId = this.blockchain?.chainId || '0x1';
+    const recoveredAddress = recoverAddress(hash, signature, chainId);
+    const result = signer === recoveredAddress.toLowerCase();
+    */
+    return result;
   }
 
   public async interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any> {

@@ -1,3 +1,5 @@
+import { publicToAddress, ecrecover } from "ethereumjs-util";
+
 /**
  * Convert a Number to Hexadecimal
  * Given an integer, write an algorithm to 
@@ -83,4 +85,24 @@ export const toHex = (data: any): string => {
   }
 
   return result;
+}
+
+const hexToNumber = (hex: string) => {
+  const result = parseInt(hex, 16);
+  return result;
+}
+
+const toRSV = (signature: string) => {
+  const r = Buffer.from(signature.slice(0, 66));
+  const s = Buffer.from(`0x${signature.slice(66, 130)}`);
+  const v = Buffer.from(`0x${signature.slice(130, 132)}`);
+  return { r, s, v };
+};
+
+export const recoverAddress = (hash: string, signature: string, chainId: string) => {
+  const sig = toRSV(signature);
+  const data = Buffer.from(hash.slice(2), 'hex');
+  const publicKey = ecrecover(data, sig.v, sig.r, sig.s);
+  const sender = publicToAddress(publicKey).toString('hex');
+  return sender;
 }

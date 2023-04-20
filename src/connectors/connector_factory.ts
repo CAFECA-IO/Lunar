@@ -28,16 +28,16 @@ class ConnectorFactory {
     else {
       switch(wallet) {
         case Wallets.TideWallet:
-          connector = new TideWallet();
+          connector = TideWallet.getInstance();
         break;
   
         case Wallets.imToken:
-          connector = new ImToken();
+          connector = ImToken.getInstance();
         break;
   
         case Wallets.Metamask:
         default:
-          connector = new Metamask();
+          connector = Metamask.getInstance();
       }
     }
     return connector;

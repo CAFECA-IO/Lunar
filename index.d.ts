@@ -21,6 +21,7 @@ declare class Lunar {
   public blockchain: IBlockchain;
 
   public constructor();
+  public resetEvents(): void;
   public on(event: string, callback: Function): void;
   public findConnector({ walletType }: { walletType: string }): IConnector | undefined;
   public connect({ wallet, blockchain }: { wallet?: string, blockchain?: IBlockchain }): Promise<boolean>;

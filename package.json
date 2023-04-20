@@ -1,6 +1,6 @@
 {
   "name": "@cafeca/lunar",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Blockchain Connect Module",
   "main": "dist/index.js",
   "files": [
@@ -39,7 +39,8 @@
   "dependencies": {
     "@cafeca/keccak": "^0.8.8",
     "bignumber.js": "^9.1.1",
-    "elliptic": "^6.5.4"
+    "elliptic": "^6.5.4",
+    "ethereumjs-util": "^7.1.5"
   },
   "devDependencies": {
     "@types/jest": "^29.2.5",
