@@ -23,7 +23,7 @@ declare global {
 export class Lunar {
   private static instance: Lunar;
   // static version = `v${version}`;
-  public static version = `v0.5.2`;
+  public static version = `v0.5.3`;
   public static Blockchains = Blockchains;
   public static Wallets = Wallets;
   public static keccak256 = keccak256;
