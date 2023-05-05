@@ -199,18 +199,19 @@ export class Lunar {
 
   public verify(message: string, signature: string): boolean {
     // ++ ToDo: finish in v0.6.0
-    return true;
+    return signature.length > 18;
   }
   public verifyTypedData(params: IJSON, signature: string): boolean {
     // ++ ToDo: finish in v0.6.0
     // verify metamask typed data v4
 
     const signer = this.address;
-    const json = JSON.parse(JSON.stringify(params));
+    const message = JSON.stringify(params);
+    const json = JSON.parse(message);
     const address = json?.message?.signer;
     const result = address?
-      signer === address.toLowerCase() :
-      true;
+      (signer === address.toLowerCase() && this.verify(message, signature)) :
+      this.verify(message, signature);
     /*
     const hash = keccak256(data);
     const chainId = this.blockchain?.chainId || '0x1';
