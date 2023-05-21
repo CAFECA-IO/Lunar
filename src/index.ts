@@ -197,21 +197,21 @@ export class Lunar {
     return result;
   }
 
-  public verify(message: string, signature: string): boolean {
+  public verify(message: string, signature: string, signer?: string): boolean {
     // ++ ToDo: finish in v0.6.0
     return signature.length > 18;
   }
-  public verifyTypedData(params: IJSON, signature: string): boolean {
+  public verifyTypedData(params: IJSON, signature: string, signer?: string): boolean {
     // ++ ToDo: finish in v0.6.0
     // verify metamask typed data v4
 
-    const signer = this.address;
+    const expectSigner = signer || this.address || '';
     const message = JSON.stringify(params);
     const json = JSON.parse(message);
     const address = json?.message?.signer;
     const result = address?
-      (signer === address.toLowerCase() && this.verify(message, signature)) :
-      this.verify(message, signature);
+      (expectSigner === address.toLowerCase() && this.verify(message, signature, expectSigner)) :
+      this.verify(message, signature, expectSigner);
     /*
     const hash = keccak256(data);
     const chainId = this.blockchain?.chainId || '0x1';
