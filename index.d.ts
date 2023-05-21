@@ -33,8 +33,8 @@ declare class Lunar {
   public getData({ contract, func, params, data }: { contract: string, data?: string, func?: string, params?: string[], state?: string }): Promise<string>;
   public send({ to, amount, data }: { to: string, amount: number, data:string }): Promise<string>;
   public signTypedData(params: IJSON): Promise<string>;
-  public verify(message: string, signature: string): boolean;
-  public verifyTypedData(params: IJSON, signature: string): boolean;
+  public verify(message: string, signature: string, expectSigner?: string): boolean;
+  public verifyTypedData(params: IJSON, signature: string, expectSigner?: string): boolean;
   public interfaceOf({ contract, abi }: { contract: string, abi: any }): Promise<any>;
 }
 export default Lunar;
