@@ -23,7 +23,7 @@ declare global {
 export class Lunar {
   private static instance: Lunar;
   // static version = `v${version}`;
-  public static version = `v0.5.6`;
+  public static version = `v0.5.7`;
   public static Blockchains = Blockchains;
   public static Wallets = Wallets;
   public static keccak256 = keccak256;
@@ -208,7 +208,7 @@ export class Lunar {
     const message = JSON.stringify(params);
     const json = JSON.parse(message);
     const address = json?.message?.signer;
-    const expectSigner = signer || address || '';
+    const expectSigner = address || signer || '';
     const result = address?
       (expectSigner === address.toLowerCase() && this.verify(message, signature, expectSigner)) :
       this.verify(message, signature, expectSigner);
