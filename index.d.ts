@@ -3,7 +3,6 @@ import IBlockchain from "./src/interfaces/iblockchain";
 import IConnector from "./src/interfaces/iconnector";
 import IEnv from "./src/interfaces/ienv";
 import IJSON from "./src/interfaces/ijson";
-import WalletConnect from "@walletconnect/core";
 
 declare class Lunar {
   private static instance: Lunar;
@@ -20,7 +19,6 @@ declare class Lunar {
   public isConnected: boolean;
   public address: string;
   public blockchain: IBlockchain;
-  public walletConnect: WalletConnect | undefined;
 
   public constructor();
   public resetEvents(): void;
