@@ -9,8 +9,6 @@ import { recoverAddress } from './libs/common';
 import IJSON from './interfaces/ijson';
 import { EventEmitter } from 'events';
 import { keccak256 } from '@cafeca/keccak';
-import WalletConnect from "@walletconnect/core";
-// import { version } from '../package.json';
 
 declare global {
   interface Window { Lunar: any; }
@@ -23,12 +21,10 @@ declare global {
 
 export class Lunar {
   private static instance: Lunar;
-  // static version = `v${version}`;
-  public static version = `v0.5.8`;
+  public static version = `v0.5.9`;
   public static Blockchains = Blockchains;
   public static Wallets = Wallets;
   public static keccak256 = keccak256;
-  public walletConnect: WalletConnect|undefined;
 
   public static getInstance(): Lunar {
     if (!Lunar.instance) {
@@ -60,7 +56,6 @@ export class Lunar {
 
   constructor() {
     this.connector = ConnectorFactory.create();
-    this.walletConnect = new WalletConnect();
   }
 
   public resetEvents() {
@@ -195,6 +190,7 @@ export class Lunar {
     try {
       result = await this.connector?.signTypedData(params) || '0x';
     } catch (error) {
+      throw error;
       // ++ ToDo: finish in v0.6.0
     }
     return result;
