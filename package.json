@@ -1,6 +1,6 @@
 {
   "name": "@cafeca/lunar",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "Blockchain Connect Module",
   "main": "dist/index.js",
   "files": [
@@ -38,6 +38,7 @@
   "homepage": "https://github.com/CAFECA-IO/Lunar#readme",
   "dependencies": {
     "@cafeca/keccak": "^0.8.8",
+    "@walletconnect/core": "^2.8.1",
     "bignumber.js": "^9.1.1",
     "elliptic": "^6.5.4",
     "ethereumjs-util": "^7.1.5"
