@@ -78,7 +78,9 @@ class Metamask extends Connector {
 
   async signTypedData(data: IEIP712Data): Promise<string> {
     const typedData: IEIP712Data = data;
-    typedData.domain.chainId = this.chainId;
+    typedData.domain.chainId = typedData.domain.chainId ?
+      typedData.domain.chainId : 
+      this.chainId;
     typedData.message.from = this.address;
 
     const from = this.address;

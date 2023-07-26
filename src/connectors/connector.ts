@@ -4,6 +4,15 @@ import IAsset from "../interfaces/iasset";
 import IBlockchain from "../interfaces/iblockchain";
 import { EventEmitter } from 'events';
 
+const g: any = typeof globalThis === "object"
+    ? globalThis
+    : typeof window === "object"
+        ? window
+        : typeof global === "object"
+            ? global
+            : null; // Causes an error on the next line
+const { ethereum } = g;
+
 class Connector {
   _isConnected: boolean = false;
   _address: string = '0x';
@@ -41,7 +50,8 @@ class Connector {
     return this._type;
   }
   get chainId() {
-    return this._blockchain.chainId;
+    const chainId = ethereum?.chainId || this._blockchain.chainId;
+    return chainId;
   }
   get emitter() {
     return this._emitter;
