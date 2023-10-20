@@ -96,7 +96,11 @@ class Metamask extends Connector {
       params,
       from
     };
+    // tslint:disable-next-line:no-console
+    console.log('requestData in Lunar `signTypedData`', requestData);
     const result = await ethereum?.request(requestData);
+    // tslint:disable-next-line:no-console
+    console.log('result in Lunar `signTypedData`', result);
     return result;
   }
 
