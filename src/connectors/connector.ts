@@ -16,7 +16,7 @@ const { ethereum } = g;
 class Connector {
   _isConnected: boolean = false;
   _address: string = '0x';
-  _blockchain: IBlockchain = Blockchains.BOLT;
+  _blockchain: IBlockchain = Blockchains.iSunCoin;
   _type: string = Wallets.TideWallet;
   _assets: string[] = [];
   _emitter: EventEmitter = new EventEmitter();

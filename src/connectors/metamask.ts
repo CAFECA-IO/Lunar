@@ -48,6 +48,12 @@ class Metamask extends Connector {
     }
   }
 
+  private async ensureConnection(): Promise<boolean> {
+    await ethereum?.enable();
+    this.recoverConnection();
+    return true;
+  }
+
   async connect({ blockchain }: { blockchain?: IBlockchain } = {}) {
     return this._connect({ blockchain });
   }
@@ -77,6 +83,7 @@ class Metamask extends Connector {
   }
 
   async signTypedData(data: IEIP712Data): Promise<string> {
+    this.ensureConnection();
     const typedData: IEIP712Data = data;
     typedData.domain.chainId = typedData.domain.chainId ?
       typedData.domain.chainId : 
