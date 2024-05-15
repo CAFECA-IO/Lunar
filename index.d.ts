@@ -11,7 +11,7 @@ declare class Lunar {
   public static Wallets: string[];
   public static getInstance(): Lunar
   public static listBlockchain(isTestnet: boolean | undefined): IBlockchain[];
-  public static findBlockchain(chainId: number): IBlockchain;
+  public static findBlockchain(chainId: string): IBlockchain;
   public static recovery(message: string, signature: string): string;
   public static recoveryTypedData(params: IJSON, signature: string): string;
 
