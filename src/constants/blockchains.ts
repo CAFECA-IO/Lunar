@@ -118,17 +118,17 @@ export const Blockchains = class {
     },
     isTestnet: true,
   };
-  static BOLT: IBlockchain = {
+  static iSunCoin: IBlockchain = {
     chainId: "0x1f51",
-    key: "BOLT",
-    chainName: "BOLT",
+    key: "iSunCoin",
+    chainName: "iSunCoin",
     nativeCurrency: {
-      name: "BOLT Liquid Token",
-      symbol: "BLT",
+      name: "iSunCoin",
+      symbol: "ISC",
       decimals: 18,
     },
-    rpcUrls: [ "https://rpc.boltchain.io" ],
-    blockExplorerUrls: [ "https://explorer.blotchain.io" ],
+    rpcUrls: [ "https://isuncoin.baifa.io" ],
+    blockExplorerUrls: [ "https://baifa.io/app/chains/8017" ],
     iconUrls: [ "https://blotchain.io/icon.png" ],
     isTestnet: false,
   };

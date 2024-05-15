@@ -5,7 +5,7 @@ describe("Check Blockchains", () => {
     const { chainName } = Lunar.findBlockchain("0x1f51");
     const lunar = new Lunar();
     const result = await lunar.connect();
-    expect(chainName).toBe("BOLT");
+    expect(chainName).toBe("iSunCoin");
     expect(result).toBe(true);
   });
 })
